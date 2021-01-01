@@ -12,7 +12,7 @@ int main(int argc, char const *argv[]){
 		cout << "Ejemplo: " << endl;
 		cout << argv[0] << " datos.txt" << endl;
 		return -1;
-	}	
+	}
 	
 	ifstream entrada(argv[1]);
 	string linea;
