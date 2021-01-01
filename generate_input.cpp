@@ -218,7 +218,7 @@ int main(int argc, char const *argv[]){
 			aux[j] = 0;
 		}
 		// Personas que pueden hacer la visita
-		cantSi = rand() % (n/2); // max 50%
+		cantSi = rand() % (n/2) + 3; // max 50% mínimo 3
 		for(int j=0; j<cantSi; j++){
 			aux[(rand() % n)] = 1;
 		}
@@ -233,7 +233,7 @@ int main(int argc, char const *argv[]){
 			aux[j] = 0;
 		}
 		// Personas que pueden hacer la visita
-		cantSi = rand() % (m/2); // max 50%
+		cantSi = rand() % (m/2) + 3; // max 50%
 		for(int j=0; j<cantSi; j++){
 			aux[(rand() % m)] = 1;
 		}
