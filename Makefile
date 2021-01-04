@@ -2,7 +2,7 @@ CPP=g++
 
 OBJETOS=MiniBitmap.o
 
-BINS=test_minibitmap load_input generate_input
+BINS=test_minibitmap load_input generate_input checker_output
 
 CPPFLAGS=-Wall -g -O2 -std=c++11 -O3 -DNDEBUG -w -lm
 
@@ -21,6 +21,9 @@ load_input:
 
 generate_input:
 	$(CPP) $(CPPFLAGS) -o ./generate_input generate_input.cpp $(OBJETOS)
+
+checker_output:
+	$(CPP) $(CPPFLAGS) -o ./checker_output checker_output.cpp $(OBJETOS)
 	
 
 clean:
