@@ -1,10 +1,13 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <cstring>
 #include <string>
 #include "MiniBitmap.hpp"
 
 using namespace std;
+
+time_t loadtime(string ts);
 
 int main(int argc, char const *argv[]){
 	if(argc < 2){
@@ -124,14 +127,16 @@ int main(int argc, char const *argv[]){
 
 	// Lectura de h líneas con al información de bloques horarios
 	string bloque_id[h];
-	string bloque_timestamp[h];
+	time_t bloque_timestamp[h];
+	string auxstring;
 	for(int i=0; i < h; i++){
 		// Cada línea cotiene:
 		// id_bloque timestamp_bloque
 		getline(entrada, linea);
 		iss = istringstream(linea);
-		iss >> bloque_id[i] >> bloque_timestamp[i];
-		cout << bloque_id[i] << " " << bloque_timestamp[i] << endl;
+		iss >> bloque_id[i] >> auxstring;
+		bloque_timestamp[i] = loadtime(auxstring);
+		cout << bloque_id[i] << " " << ctime(&bloque_timestamp[i]);
 	}
 
 	// Lectura de l líneas con al información de las visitas
@@ -180,4 +185,17 @@ int main(int argc, char const *argv[]){
 	}
 
 	return 0;
+}
+
+
+time_t loadtime(string ts){
+	time_t t;
+	//return t;
+	//time (&t);
+	char * cts = new char [ts.length()+1];
+	strcpy (cts, ts.c_str());
+	struct tm tm;
+	strptime(cts, "%Y-%m-%dT%H:%M:%S%Z", &tm);
+	t = mktime(&tm);  // t is now your desired time_t
+	return t;
 }
