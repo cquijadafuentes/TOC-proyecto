@@ -20,11 +20,11 @@ test_minibitmap:
 load_input:
 	$(CPP) $(CPPFLAGS) -o ./old/load_input old/load_input.cpp $(OBJETOS)
 
-generate_input:
-	$(CPP) $(CPPFLAGS) -o ./generate_input generate_input.cpp $(OBJETOS)
-
 checker_output:
 	$(CPP) $(CPPFLAGS) -o ./old/checker_output old/checker_output.cpp $(OBJETOS)
+
+generate_input:
+	$(CPP) $(CPPFLAGS) -o ./generate_input generate_input.cpp $(OBJETOS)
 	
 SRPlanner_test:
 	$(CPP) $(CPPFLAGS) -o ./SRPlanner_test SRPlanner_test.cpp $(OBJETOS)
@@ -34,5 +34,5 @@ SRPlanner_checker:
 
 
 clean:
-	rm -f $(OBJETOS) $(BINS)
+	rm -f $(OBJETOS) $(BINS) old/test_minibitmap old/load_input old/checker_output
 	cd .; rm -f *.a $(BINS)
