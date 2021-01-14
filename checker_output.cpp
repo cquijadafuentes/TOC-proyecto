@@ -298,12 +298,6 @@ time_t loadtime(string ts){
 	return t;
 }
 
-
-string stringTime(time_t t){
-	string aux = ctime(&t);
-	return aux.substr(0,aux.length()-1);
-}
-
 time_t sumarMinutos(time_t t, int m){
 	struct tm tm = *localtime(&t);
 	tm.tm_min += m;

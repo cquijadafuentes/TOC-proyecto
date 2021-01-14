@@ -1,5 +1,25 @@
 #include "SRPlanner.hpp"
 
+time_t obtenerTime(string ts){
+	time_t t;
+	//return t;
+	//time (&t);
+	char * cts = new char [ts.length()+1];
+	strcpy (cts, ts.c_str());
+	struct tm tm;
+	strptime(cts, "%Y-%m-%dT%H:%M:%S%Z", &tm);
+	free(cts);
+	t = mktime(&tm);  // t is now your desired time_t
+	return t;
+}
+
+
+string stringTime(time_t t){
+	string aux = ctime(&t);
+	return aux.substr(0,aux.length()-1);
+}
+
+
 InstanceInput::InstanceInput(string filename){
 	ifstream entrada(filename);
 	string linea;
@@ -112,7 +132,7 @@ InstanceInput::InstanceInput(string filename){
 		getline(entrada, linea);
 		iss = istringstream(linea);
 		iss >> bloque_id[i] >> auxstring;
-		bloque_timestamp[i] = loadtime(auxstring);
+		bloque_timestamp[i] = obtenerTime(auxstring);
 		cout << bloque_id[i] << " " << ctime(&bloque_timestamp[i]);
 	}
 
@@ -159,7 +179,7 @@ InstanceInput::InstanceInput(string filename){
 }
 
 InstanceInput::~InstanceInput(){
-	cout << "Eliminando..." << endl;
+	cout << "Eliminando InstanceInput..." << endl;
 	for(int i=0; i < n; i++){
 		delete pers_horasdisp[i];
 		delete pers_afin[i];
@@ -172,17 +192,57 @@ InstanceInput::~InstanceInput(){
 }
 
 
+InstanceOutput::InstanceOutput(string filename, int nn, int mm, int kk, int ll){
+	n = nn;
+	m = mm;
+	k = kk;
+	l = ll;
+
+	ifstream salida(filename);
+	string linea;
+	getline(salida, linea);
+	istringstream iss;
+
+	iss = istringstream(linea);
+	iss >> t;
+
+	string traslado_ts;
+	
+	viaje_hora = vector<time_t>(t);
+	viaje_idvehi = vector<string>(t);
+	viaje_idubica_orig = vector<string>(t);
+	viaje_idubica_dest = vector<string>(t);
+	viaje_pers = vector<MiniBitmap*>(t);
+	viaje_idvisita = vector<string>(t);
+
+	for(int i=0; i<t; i++){
+		getline(salida, linea);
+		iss = istringstream(linea);
+		iss >> traslado_ts >> viaje_idvehi[i] >> viaje_idubica_orig[i] >> viaje_idubica_dest[i];
+		viaje_hora[i] = obtenerTime(traslado_ts);
+		cout << stringTime(viaje_hora[i]) << " " << viaje_idvehi[i] << " " << viaje_idubica_orig[i] << " " << viaje_idubica_dest[i] << " ";
+		int aux;
+		// Procesando personas que pueden realizar la visita
+		viaje_pers[i] = new MiniBitmap(n);
+		for(int j=0; j<n; j++){
+			iss >> aux;
+			if(aux == 1){
+				viaje_pers[i]->setBit(j);
+			}
+		}
+		viaje_pers[i]->printBitmap();
+		cout << " ";
+		iss >> viaje_idvisita[i];
+		cout << viaje_idvisita[i] << endl;
+	}
+	
+
+}
 
 
-time_t InstanceInput::loadtime(string ts){
-	time_t t;
-	//return t;
-	//time (&t);
-	char * cts = new char [ts.length()+1];
-	strcpy (cts, ts.c_str());
-	struct tm tm;
-	strptime(cts, "%Y-%m-%dT%H:%M:%S%Z", &tm);
-	free(cts);
-	t = mktime(&tm);  // t is now your desired time_t
-	return t;
+InstanceOutput::~InstanceOutput(){
+	cout << "Eliminando InstanceOutput..." << endl;
+	for(int i=0; i < t; i++){
+		delete viaje_pers[i];
+	}
 }

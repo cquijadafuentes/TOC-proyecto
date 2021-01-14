@@ -7,10 +7,15 @@
 #include "MiniBitmap.hpp"
 using namespace std;
 
+time_t obtenerTime(string ts);
+
+string stringTime(time_t t);
+
 class InstanceInput{
 	public:
 		InstanceInput(string filename);
 		~InstanceInput();
+
 		int n;			// Cantidad de Personas
 		int m;			// Cantidad de Vehículos
 		int k;			// Cantidad de Ubicaciones
@@ -18,6 +23,7 @@ class InstanceInput{
 		int z; 			// Minutos por bloque
 		int l;			// Cantidad de Visitas
 		int v;			// Valor del Viático
+
 		vector<string> pers_id;
 		vector<int> pers_maxvisitas;
 		vector<MiniBitmap*> pers_horasdisp;
@@ -44,6 +50,26 @@ class InstanceInput{
 		vector<int> visita_prioridad;
 
 	private:
-		time_t loadtime(string ts);
+};
 
+class InstanceOutput{
+	public:
+		InstanceOutput(string filename, int nn, int mm, int kk, int ll);
+		~InstanceOutput();
+
+		int n;			// Cantidad de Personas
+		int m;			// Cantidad de Vehículos
+		int k;			// Cantidad de Ubicaciones
+		int l;			// Cantidad de Visitas
+		int t;			// Cantidad de Viajes
+
+		vector<time_t> viaje_hora;
+		vector<string> viaje_idvehi;
+		vector<string> viaje_idubica_orig;
+		vector<string> viaje_idubica_dest;
+		vector<MiniBitmap*> viaje_pers;
+		vector<string> viaje_idvisita;
+
+	private:
+		
 };
