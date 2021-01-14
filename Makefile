@@ -1,8 +1,8 @@
 CPP=g++
 
-OBJETOS=MiniBitmap.o
+OBJETOS=MiniBitmap.o SRPlanner.o
 
-BINS=test_minibitmap load_input generate_input checker_output
+BINS=test_minibitmap load_input generate_input checker_output SRPlanner_test
 
 CPPFLAGS=-Wall -g -O2 -std=c++11 -O3 -DNDEBUG -w -lm
 
@@ -25,6 +25,9 @@ generate_input:
 checker_output:
 	$(CPP) $(CPPFLAGS) -o ./checker_output checker_output.cpp $(OBJETOS)
 	
+SRPlanner_test:
+	$(CPP) $(CPPFLAGS) -o ./SRPlanner_test SRPlanner_test.cpp $(OBJETOS)
+
 
 clean:
 	rm -f $(OBJETOS) $(BINS)

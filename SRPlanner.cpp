@@ -1,36 +1,12 @@
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <cstring>
-#include <string>
-#include "MiniBitmap.hpp"
+#include "SRPlanner.hpp"
 
-using namespace std;
-
-time_t loadtime(string ts);
-
-int main(int argc, char const *argv[]){
-	if(argc < 2){
-		cout << "Error! Falta argunmento con nombre del archivo de entrada." << endl;
-		cout << "Ejemplo: " << endl;
-		cout << argv[0] << " datos.txt" << endl;
-		return -1;
-	}
-	
-	ifstream entrada(argv[1]);
+InstanceInput::InstanceInput(string filename){
+	ifstream entrada(filename);
 	string linea;
 	getline(entrada, linea);
 	istringstream iss;
 
 	iss = istringstream(linea);
-	// La primera linea contiene los siguientes valores:
-	int n;			// Cantidad de Personas
-	int m;			// Cantidad de Vehículos
-	int k;			// Cantidad de Ubicaciones
-	int h;			// Cantidad de Bloques horarios
-	int z; 			// Minutos por bloque
-	int l;			// Cantidad de Visitas
-	int v;			// Valor del Viático
 	// Lectura de la primera linea.
 	iss >> n >> m >> k >> h >> z >> l >> v;
 
@@ -43,91 +19,92 @@ int main(int argc, char const *argv[]){
 	cout << v << " valor viático" << endl;
 
 	// Lectura de n líneas con la información de las personas
-	string persona_id[n];
-	int persona_maxvisitas[n];
-	MiniBitmap* persona_horasdisp[n];
-	MiniBitmap* persona_afinidad[n];
-	MiniBitmap* persona_prefvisita[n];
+	pers_id = vector<string>(n);
+	pers_maxvisitas = vector<int>(n);
+	pers_horasdisp = vector<MiniBitmap*>(n);
+	pers_afin = vector<MiniBitmap*>(n);
+	pers_prefvisita = vector<MiniBitmap*>(n);
+
 	for(int i=0; i < n; i++){
 		// Cada línea cotiene:
 		// id_persona visitas_max horas_disponibles(h bits) afinidad (n bits) preferencias_visitas(l bits)
 		getline(entrada, linea);
 		iss = istringstream(linea);
-		iss >> persona_id[i] >> persona_maxvisitas[i];
-		cout << persona_id[i] << " " << persona_maxvisitas[i] << " ";
+		iss >> pers_id[i] >> pers_maxvisitas[i];
+		cout << pers_id[i] << " " << pers_maxvisitas[i] << " ";
 		int aux;
 		// Procesando horas disponibles
-		persona_horasdisp[i] = new MiniBitmap(h);
+		pers_horasdisp[i] = new MiniBitmap(h);
 		for(int j=0; j<h; j++){
 			iss >> aux;
 			if(aux == 1){
-				persona_horasdisp[i]->setBit(j);
+				pers_horasdisp[i]->setBit(j);
 			}
 		}
-		persona_horasdisp[i]->printBitmap();
+		pers_horasdisp[i]->printBitmap();
 		cout << " ";
 		// Procesando afinidad
-		persona_afinidad[i] = new MiniBitmap(n);
+		pers_afin[i] = new MiniBitmap(n);
 		for(int j=0; j<n; j++){
 			iss >> aux;
 			if(aux == 1){
-				persona_afinidad[i]->setBit(j);
+				pers_afin[i]->setBit(j);
 			}
 		}
-		persona_afinidad[i]->printBitmap();
+		pers_afin[i]->printBitmap();
 		cout << " ";
 		// Procesando preferencias visitas
-		persona_prefvisita[i] = new MiniBitmap(l);
+		pers_prefvisita[i] = new MiniBitmap(l);
 		for(int j=0; j<l; j++){
 			iss >> aux;
 			if(aux == 1){
-				persona_prefvisita[i]->setBit(j);
+				pers_prefvisita[i]->setBit(j);
 			}
 		}
-		persona_prefvisita[i]->printBitmap();
+		pers_prefvisita[i]->printBitmap();
 		cout << " ";
 
 		cout << endl;
 	}
 
 	// Lectura de m líneas con la información de los vehículos
-	string vehiculo_id[m];
-	int vehiculo_capacidad[m];
-	int vehiculo_costo[m];
+	vehi_id = vector<string>(m);
+	vehi_cap = vector<int>(m);
+	vehi_cost = vector<int>(m);
 	for(int i=0; i < m; i++){
 		// Cada línea cotiene:
 		// id_vehichulo capacidad costo
 		getline(entrada, linea);
 		iss = istringstream(linea);
-		iss >> vehiculo_id[i] >> vehiculo_capacidad[i] >> vehiculo_costo[i];
-		cout << vehiculo_id[i] << " " << vehiculo_capacidad[i] << " " << vehiculo_costo[i] << endl;
+		iss >> vehi_id[i] >> vehi_cap[i] >> vehi_cost[i];
+		cout << vehi_id[i] << " " << vehi_cap[i] << " " << vehi_cost[i] << endl;
 	}
 
 	// Lectura de k líneas con las distancias entre ubicaciones
 	// Nota: primera ubicación siempre es SERVIU
-	string ubicaciones_id[k];
-	pair<double,int> ubicaciones_dist_mins[k];
+	ubica_id = vector<string>(k);
+	ubica_dist_mins = vector<pair<double,int>>(k);
 	for(int i=0; i < k; i++){
 		// Cada línea cotiene:
 		// id_ubicacion k pares distancia,tiempo
 		getline(entrada, linea);
 		iss = istringstream(linea);
-		iss >> ubicaciones_id[i];
-		cout << ubicaciones_id[i] << " ";
+		iss >> ubica_id[i];
+		cout << ubica_id[i] << " ";
 		// Procesando pares distancia,tiempo
 		double auxdist;
 		int auxtime;
 		for(int j=0; j<k; j++){
 			iss >> auxdist >> auxtime;
-			ubicaciones_dist_mins[j] = make_pair(auxdist,auxtime);
-			cout << "(" << ubicaciones_dist_mins[j].first << "-" << ubicaciones_dist_mins[j].second << ") ";
+			ubica_dist_mins[j] = make_pair(auxdist,auxtime);
+			cout << "(" << ubica_dist_mins[j].first << "-" << ubica_dist_mins[j].second << ") ";
 		}
 		cout << endl;
 	}
 
 	// Lectura de h líneas con al información de bloques horarios
-	string bloque_id[h];
-	time_t bloque_timestamp[h];
+	bloque_id = vector<string>(h);
+	bloque_timestamp = vector<time_t>(h);
 	string auxstring;
 	for(int i=0; i < h; i++){
 		// Cada línea cotiene:
@@ -140,14 +117,14 @@ int main(int argc, char const *argv[]){
 	}
 
 	// Lectura de l líneas con al información de las visitas
-	string visita_id[l];
-	string visita_ubicacion[l];
-	string visita_bloque_inicio[l];
-	string visita_bloque_fin[l];
-	MiniBitmap* visita_personas[l];
-	MiniBitmap* visita_vehiculos[l];
-	int visita_duracion_bloques[l];
-	int visita_prioridad[l];
+	visita_id = vector<string>(l);
+	visita_ubicacion = vector<string>(l);
+	visita_bloque_inicio = vector<string>(l);
+	visita_bloque_fin = vector<string>(l);
+	visita_personas = vector<MiniBitmap*>(l);
+	visita_vehiculos = vector<MiniBitmap*>(l);
+	visita_testimado_bloques = vector<int>(l);
+	visita_prioridad = vector<int>(l);
 	for(int i=0; i < l; i++){
 		// Cada línea cotiene:
 		// id_visita id_bloque_inicio id_bloque_fin personas (n bits) vehículos (m bits) bloques_duracion prioridad
@@ -176,19 +153,28 @@ int main(int argc, char const *argv[]){
 		}
 		visita_vehiculos[i]->printBitmap();
 		cout << " ";
-		iss >> visita_duracion_bloques[i] >> visita_prioridad[i];
-		cout << visita_duracion_bloques[i] << " " << visita_prioridad[i] << endl;
+		iss >> visita_testimado_bloques[i] >> visita_prioridad[i];
+		cout << visita_testimado_bloques[i] << " " << visita_prioridad[i] << endl;
 	}
-	cout << "Sobrante:" << endl;
-	while(getline(entrada, linea)){
-		cout << linea << endl;
-	}
+}
 
-	return 0;
+InstanceInput::~InstanceInput(){
+	cout << "Eliminando..." << endl;
+	for(int i=0; i < n; i++){
+		delete pers_horasdisp[i];
+		delete pers_afin[i];
+		delete pers_prefvisita[i];
+	}
+	for(int i=0; i < l; i++){
+		delete visita_personas[i];
+		delete visita_vehiculos[i];
+	}
 }
 
 
-time_t loadtime(string ts){
+
+
+time_t InstanceInput::loadtime(string ts){
 	time_t t;
 	//return t;
 	//time (&t);
@@ -196,6 +182,7 @@ time_t loadtime(string ts){
 	strcpy (cts, ts.c_str());
 	struct tm tm;
 	strptime(cts, "%Y-%m-%dT%H:%M:%S%Z", &tm);
+	free(cts);
 	t = mktime(&tm);  // t is now your desired time_t
 	return t;
 }
