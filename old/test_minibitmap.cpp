@@ -1,5 +1,5 @@
 #include <iostream>
-#include "MiniBitmap.hpp"
+#include "../MiniBitmap.hpp"
 
 using namespace std;
 

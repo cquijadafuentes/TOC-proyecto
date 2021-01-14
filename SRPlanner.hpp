@@ -4,6 +4,7 @@
 #include <cstring>
 #include <string>
 #include <vector>
+#include <algorithm>
 #include "MiniBitmap.hpp"
 using namespace std;
 
@@ -52,24 +53,36 @@ class InstanceInput{
 	private:
 };
 
+class Traslado{
+	public:
+		time_t horainicio;
+		time_t horafin;
+		string idvehi;
+		string iduborigen;
+		string idubdestino;
+		MiniBitmap* bm_personas;
+		string idvisita;
+		Traslado(time_t tt, string idve, string idor, string iddes, MiniBitmap* mb, string idvis);
+		~Traslado();
+		string toString();
+	private:
+
+};
+
 class InstanceOutput{
 	public:
-		InstanceOutput(string filename, int nn, int mm, int kk, int ll);
-		~InstanceOutput();
-
 		int n;			// Cantidad de Personas
 		int m;			// Cantidad de Vehículos
 		int k;			// Cantidad de Ubicaciones
 		int l;			// Cantidad de Visitas
 		int t;			// Cantidad de Viajes
-
-		vector<time_t> viaje_hora;
-		vector<string> viaje_idvehi;
-		vector<string> viaje_idubica_orig;
-		vector<string> viaje_idubica_dest;
-		vector<MiniBitmap*> viaje_pers;
-		vector<string> viaje_idvisita;
-
-	private:
+		vector<Traslado*> tr;
 		
+		InstanceOutput(string filename, int nn, int mm, int kk, int ll);
+		~InstanceOutput();
+
+		void sortByIdVehiculoFecha();
+		int validaViajesPorVehiculos();
+	private:
+		static bool comparadorIdVehiculoFecha(Traslado* i1, Traslado* i2);
 };
