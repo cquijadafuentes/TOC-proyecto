@@ -1,0 +1,13 @@
+OAR Tools de GOOGLE
+
+Para el mincostflow
+
+Luego, pensar el Greedy 
+
+Luego movimientos locales
+
+Consejo:
+- La Estructura de Datos para la solución, que sea sencilla.
+
+Usar:
+https://developers.google.com/optimization
