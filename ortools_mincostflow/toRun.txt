@@ -1,1 +1,82 @@
 make build SOURCE=examples/cpp/min_cost_flow_SRP.cc
+
+
+********************  OUTPUT  ********************
+$ ./min_cost_flow_SRP < min_cost_flow_SRP.txt 
+Esto esta funcionando... 
+vertices: 30
+aristas: 70
+I0507 07:41:46.924316 25768 min_cost_flow_SRP.cc:54] Solving min cost flow with: 30 nodes, and 70 arcs.
+I0507 07:41:47.131103 25768 min_cost_flow_SRP.cc:63] Minimum cost flow: 60
+I0507 07:41:47.151611 25768 min_cost_flow_SRP.cc:64] 
+I0507 07:41:47.162597 25768 min_cost_flow_SRP.cc:65] Arc   : Flow / Capacity / Cost
+I0507 07:41:47.172851 25768 min_cost_flow_SRP.cc:67] 0 -> 1: 3 / 20 / 1
+I0507 07:41:47.186279 25768 min_cost_flow_SRP.cc:67] 0 -> 2: 3 / 20 / 1
+I0507 07:41:47.196777 25768 min_cost_flow_SRP.cc:67] 0 -> 3: 5 / 20 / 1
+I0507 07:41:47.208251 25768 min_cost_flow_SRP.cc:67] 0 -> 4: 9 / 20 / 1
+I0507 07:41:47.219970 25768 min_cost_flow_SRP.cc:67] 0 -> 5: 0 / 20 / 1
+I0507 07:41:47.230224 25768 min_cost_flow_SRP.cc:67] 0 -> 6: 0 / 20 / 1
+I0507 07:41:47.240966 25768 min_cost_flow_SRP.cc:67] 0 -> 7: 0 / 20 / 1
+I0507 07:41:47.250732 25768 min_cost_flow_SRP.cc:67] 0 -> 8: 0 / 20 / 1
+I0507 07:41:47.261718 25768 min_cost_flow_SRP.cc:67] 1 -> 9: 0 / 1 / 1
+I0507 07:41:47.271972 25768 min_cost_flow_SRP.cc:67] 2 -> 9: 0 / 1 / 1
+I0507 07:41:47.282958 25768 min_cost_flow_SRP.cc:67] 4 -> 9: 1 / 1 / 1
+I0507 07:41:47.294677 25768 min_cost_flow_SRP.cc:67] 2 -> 10: 1 / 1 / 1
+I0507 07:41:47.305664 25768 min_cost_flow_SRP.cc:67] 2 -> 11: 0 / 1 / 1
+I0507 07:41:47.316162 25768 min_cost_flow_SRP.cc:67] 3 -> 11: 1 / 1 / 1
+I0507 07:41:47.326416 25768 min_cost_flow_SRP.cc:67] 2 -> 12: 1 / 1 / 1
+I0507 07:41:47.336425 25768 min_cost_flow_SRP.cc:67] 1 -> 13: 0 / 1 / 1
+I0507 07:41:47.347656 25768 min_cost_flow_SRP.cc:67] 2 -> 13: 0 / 1 / 1
+I0507 07:41:47.358642 25768 min_cost_flow_SRP.cc:67] 4 -> 13: 1 / 1 / 1
+I0507 07:41:47.369628 25768 min_cost_flow_SRP.cc:67] 1 -> 14: 1 / 1 / 1
+I0507 07:41:47.381103 25768 min_cost_flow_SRP.cc:67] 2 -> 14: 0 / 1 / 1
+I0507 07:41:47.390869 25768 min_cost_flow_SRP.cc:67] 1 -> 15: 1 / 1 / 1
+I0507 07:41:47.402587 25768 min_cost_flow_SRP.cc:67] 3 -> 15: 0 / 1 / 1
+I0507 07:41:47.412109 25768 min_cost_flow_SRP.cc:67] 1 -> 16: 0 / 1 / 1
+I0507 07:41:47.422119 25768 min_cost_flow_SRP.cc:67] 2 -> 16: 0 / 1 / 1
+I0507 07:41:47.431884 25768 min_cost_flow_SRP.cc:67] 4 -> 16: 1 / 1 / 1
+I0507 07:41:47.442138 25768 min_cost_flow_SRP.cc:67] 1 -> 17: 1 / 1 / 1
+I0507 07:41:47.451904 25768 min_cost_flow_SRP.cc:67] 1 -> 18: 0 / 1 / 1
+I0507 07:41:47.462890 25768 min_cost_flow_SRP.cc:67] 2 -> 18: 0 / 1 / 1
+I0507 07:41:47.472900 25768 min_cost_flow_SRP.cc:67] 4 -> 18: 1 / 1 / 1
+I0507 07:41:47.483642 25768 min_cost_flow_SRP.cc:67] 2 -> 19: 1 / 1 / 1
+I0507 07:41:47.495117 25768 min_cost_flow_SRP.cc:67] 3 -> 19: 0 / 1 / 1
+I0507 07:41:47.504882 25768 min_cost_flow_SRP.cc:67] 2 -> 20: 0 / 1 / 1
+I0507 07:41:47.516357 25768 min_cost_flow_SRP.cc:67] 3 -> 20: 1 / 1 / 1
+I0507 07:41:47.527587 25768 min_cost_flow_SRP.cc:67] 3 -> 21: 1 / 1 / 1
+I0507 07:41:47.538574 25768 min_cost_flow_SRP.cc:67] 1 -> 22: 0 / 1 / 1
+I0507 07:41:47.550048 25768 min_cost_flow_SRP.cc:67] 2 -> 22: 0 / 1 / 1
+I0507 07:41:47.559814 25768 min_cost_flow_SRP.cc:67] 3 -> 22: 1 / 1 / 1
+I0507 07:41:47.569580 25768 min_cost_flow_SRP.cc:67] 1 -> 23: 0 / 1 / 1
+I0507 07:41:47.580322 25768 min_cost_flow_SRP.cc:67] 2 -> 23: 0 / 1 / 1
+I0507 07:41:47.590332 25768 min_cost_flow_SRP.cc:67] 3 -> 23: 1 / 1 / 1
+I0507 07:41:47.600341 25768 min_cost_flow_SRP.cc:67] 4 -> 24: 1 / 1 / 1
+I0507 07:41:47.610351 25768 min_cost_flow_SRP.cc:67] 3 -> 25: 0 / 1 / 1
+I0507 07:41:47.619873 25768 min_cost_flow_SRP.cc:67] 4 -> 25: 1 / 1 / 1
+I0507 07:41:47.630859 25768 min_cost_flow_SRP.cc:67] 1 -> 26: 0 / 1 / 1
+I0507 07:41:47.640869 25768 min_cost_flow_SRP.cc:67] 2 -> 26: 0 / 1 / 1
+I0507 07:41:47.650634 25768 min_cost_flow_SRP.cc:67] 3 -> 26: 0 / 1 / 1
+I0507 07:41:47.662109 25768 min_cost_flow_SRP.cc:67] 4 -> 26: 1 / 1 / 1
+I0507 07:41:47.672851 25768 min_cost_flow_SRP.cc:67] 3 -> 27: 0 / 1 / 1
+I0507 07:41:47.683593 25768 min_cost_flow_SRP.cc:67] 4 -> 27: 1 / 1 / 1
+I0507 07:41:47.693359 25768 min_cost_flow_SRP.cc:67] 4 -> 28: 1 / 1 / 1
+I0507 07:41:47.703369 25768 min_cost_flow_SRP.cc:67] 9 -> 29: 1 / 1 / 1
+I0507 07:41:47.714843 25768 min_cost_flow_SRP.cc:67] 10 -> 29: 1 / 1 / 1
+I0507 07:41:47.725341 25768 min_cost_flow_SRP.cc:67] 11 -> 29: 1 / 1 / 1
+I0507 07:41:47.736083 25768 min_cost_flow_SRP.cc:67] 12 -> 29: 1 / 1 / 1
+I0507 07:41:47.747558 25768 min_cost_flow_SRP.cc:67] 13 -> 29: 1 / 1 / 1
+I0507 07:41:47.757568 25768 min_cost_flow_SRP.cc:67] 14 -> 29: 1 / 1 / 1
+I0507 07:41:47.767333 25768 min_cost_flow_SRP.cc:67] 15 -> 29: 1 / 1 / 1
+I0507 07:41:47.777099 25768 min_cost_flow_SRP.cc:67] 16 -> 29: 1 / 1 / 1
+I0507 07:41:47.788085 25768 min_cost_flow_SRP.cc:67] 17 -> 29: 1 / 1 / 1
+I0507 07:41:47.805175 25768 min_cost_flow_SRP.cc:67] 18 -> 29: 1 / 1 / 1
+I0507 07:41:47.817626 25768 min_cost_flow_SRP.cc:67] 19 -> 29: 1 / 1 / 1
+I0507 07:41:47.827392 25768 min_cost_flow_SRP.cc:67] 20 -> 29: 1 / 1 / 1
+I0507 07:41:47.838867 25768 min_cost_flow_SRP.cc:67] 21 -> 29: 1 / 1 / 1
+I0507 07:41:47.849609 25768 min_cost_flow_SRP.cc:67] 22 -> 29: 1 / 1 / 1
+I0507 07:41:47.860595 25768 min_cost_flow_SRP.cc:67] 23 -> 29: 1 / 1 / 1
+I0507 07:41:47.870361 25768 min_cost_flow_SRP.cc:67] 24 -> 29: 1 / 1 / 1
+I0507 07:41:47.880371 25768 min_cost_flow_SRP.cc:67] 25 -> 29: 1 / 1 / 1
+I0507 07:41:47.890380 25768 min_cost_flow_SRP.cc:67] 26 -> 29: 1 / 1 / 1
+I0507 07:41:47.900146 25768 min_cost_flow_SRP.cc:67] 27 -> 29: 1 / 1 / 1
+I0507 07:41:47.910888 25768 min_cost_flow_SRP.cc:67] 28 -> 29: 1 / 1 / 1
