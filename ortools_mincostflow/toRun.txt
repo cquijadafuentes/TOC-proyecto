@@ -1,0 +1,1 @@
+make build SOURCE=examples/cpp/min_cost_flow_SRP.cc
