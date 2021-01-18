@@ -6,6 +6,8 @@ const int bits_int = 32;
 
 class MiniBitmap{
 	public:
+		int cant;			// Cantidad de unos en el bitmap
+		int cap;			// Capacidad del bitmap
 		MiniBitmap(int n);
 		~MiniBitmap();
 		void setBit(int x);
@@ -15,7 +17,5 @@ class MiniBitmap{
 		void printBitmap();
 	private:
 		int* bitmap;		// Arreglo de enteros para almacenar los bits
-		int cant;			// Cantidad de unos en el bitmap
-		int cap;			// Capacidad del bitmap
 		int ints;			// Cantidad de enteros para el bitmap
 };

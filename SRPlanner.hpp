@@ -50,6 +50,8 @@ class InstanceInput{
 		vector<int> visita_testimado_bloques;
 		vector<int> visita_prioridad;
 
+		void MinCostFlow();
+
 	private:
 };
 

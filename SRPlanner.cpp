@@ -195,6 +195,65 @@ InstanceInput::~InstanceInput(){
 }
 
 
+void InstanceInput::MinCostFlow(){
+
+	cout << "MinCostFlow datos:" << endl;
+	int cvertices = n + l + 2; 	// Personas + visitas + source + sink
+	cout << "Cant de nodos: " << cvertices << endl;
+	// Cálculo de la cantidad de aristas en el grafo
+	int caristas = 0;
+	caristas += n;		// Desde source a cada persona
+	caristas += l;		// Descde cada visita a sink
+	for(int i=0; i<l; i++){
+		caristas += visita_personas[i]->cant;	// Personas que pueden hacer la visita
+	}
+	cout << "Cant. de aristas: " << caristas << endl;
+
+	// Se imprime por fila, lo que se debería entregar a .AddArcWithCapacityAndUnitCost(·,·,·,·)
+	int origen, destino, capacidad, costo;
+	// 1- Desde source a cada persona.
+	origen = 0;
+	for(int i=0; i<n; i++){
+		destino = i+1;
+		capacidad = pers_maxvisitas[i];
+		costo = 1; 		// ToDo: Esto se debería calcular más adelante
+		cout << origen << " " << destino << " " << capacidad << " " << costo << endl;
+	}
+	// 2- Personas a visitas
+	for(int i=0; i<l; i++){
+		for(int j=0; j<n; j++){
+			if(visita_personas[i]->access(j) == 1){
+				origen = j+1;
+				destino = n+1+i;
+				capacidad = 1; 		// ToDo: Calcular capacidad (?) de visita de la persona j a la obra i
+				costo = 1;			// ToDo: Calcular costo de visita de la persona j a la obra i
+				cout << origen << " " << destino << " " << capacidad << " " << costo << endl;
+			}
+		}
+	}
+
+	// 3- Visitas a sink
+	destino = 1+n+l;
+	for(int i=0; i<l; i++){
+		origen = n+1+i;
+		capacidad = 1;
+		costo = 1;
+		cout << origen << " " << destino << " " << capacidad << " " << costo << endl;
+	}
+
+	// Lo que debe ir a .SetNodeSupply(·,·)
+	// 1- Source:
+	cout << "0 " << l << endl;
+	// 2- Vértices de personas y visitas en 0
+	for(int i=1; i <= (n+l); i++){
+		cout << i << " 0" << endl;
+	}
+	// 3- Sink
+	int aux = n+l+1;
+	cout << aux << " -" << l << endl;
+
+}
+
 
 //	***********************************************************
 //	********************** CLASE TRASLADO *********************
