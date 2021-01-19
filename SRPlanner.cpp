@@ -374,3 +374,28 @@ string Traslado::toString(){
 	salida += " " + idvisita;
 	return salida;
 }
+
+
+
+//	*************************************************************
+//	****************** CLASE INSTANCE SOLUTION ******************
+//	*************************************************************
+
+
+InstanceSolution::InstanceSolution(){
+	cout << "InstanceSolution" << endl;
+
+	
+}
+
+bool InstanceSolution::validarInstancia(){
+	cout << "validarInstancia" << endl;
+
+	
+}
+
+double InstanceSolution::evaluarInstancia(){
+	cout << "evaluarInstancia" << endl;
+
+	
+}

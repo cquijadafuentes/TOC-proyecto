@@ -88,3 +88,14 @@ class InstanceOutput{
 	private:
 		static bool comparadorIdVehiculoFecha(Traslado* i1, Traslado* i2);
 };
+
+class InstanceSolution{
+	public:
+		vector<pair<pair<string,string>,string>> instance;	// vector para < < idbloque - idpersona > - idvisita/idvehiculo >
+
+		InstanceSolution();
+		~InstanceSolution();
+
+		bool validarInstancia();
+		double evaluarInstancia();
+};
