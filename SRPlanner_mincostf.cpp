@@ -10,6 +10,11 @@ int main(int argc, char const *argv[]){
 	cout << "Funcionando..." << endl;
 	string fnameIn(argv[1]);
 	InstanceInput ii_srp(fnameIn);
-	ii_srp.MinCostFlow();
+	vector<pair<string,string>> vPV = ii_srp.MinCostFlow();
+
+	cout << "Visitas a ralizar idPersona -> idVisita: " << endl;
+	for(int i=0; i<vPV.size(); i++){
+		cout << vPV[i].first << " -> " << vPV[i].second << endl;
+	}
 	return 0;
 }

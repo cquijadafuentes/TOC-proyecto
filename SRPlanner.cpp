@@ -219,7 +219,7 @@ InstanceInput::~InstanceInput(){
 }
 
 
-void InstanceInput::MinCostFlow(){
+vector<pair<string,string>> InstanceInput::MinCostFlow(){
 
 	cout << "MinCostFlow datos:" << endl;
 	int cvertices = n + l + 2; 	// Personas + visitas + source + sink
@@ -300,24 +300,22 @@ void InstanceInput::MinCostFlow(){
 
 	// Copy-Paste del ejemplo:
 
-	LOG(INFO) << "Solving min cost flow with: " << graph.num_nodes()
-			<< " nodes, and " << graph.num_arcs() << " arcs.";
-
 	// Find the maximum flow between node 0 and node 4.
 	min_cost_flow.Solve();
 	if (operations_research::MinCostFlow::OPTIMAL != min_cost_flow.status()) {
 		LOG(FATAL) << "Solving the max flow is not optimal!";
 	}
 	operations_research::FlowQuantity total_flow_cost = min_cost_flow.GetOptimalCost();
-	LOG(INFO) << "Minimum cost flow: " << total_flow_cost;
-	LOG(INFO) << "";
-	LOG(INFO) << "Arc   : Flow / Capacity / Cost";
+	
+	vector<pair<string,string>> relPV;	// Relaciones Persona-Visita
 	for (int i = 0; i < caristas; ++i) {
-		LOG(INFO) << graph.Tail(i) << " -> " << graph.Head(i) << ": "
-				<< min_cost_flow.Flow(i) << " / " << min_cost_flow.Capacity(i)
-				<< " / " << min_cost_flow.UnitCost(i);
+		if(graph.Tail(i) > 0 && graph.Tail(i) <= n && min_cost_flow.Flow(i) > 0){	// Sólo personas a visitas:
+			int posPer = graph.Tail(i) - 1;
+			int posVis = graph.Head(i) - (n+1);
+			relPV.push_back(make_pair(pers_id[posPer],visita_id[posVis]));
+		}
 	}
-
+	return relPV;
 }
 
 

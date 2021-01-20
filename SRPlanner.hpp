@@ -63,7 +63,7 @@ class InstanceInput{
 		unordered_map<string,int> mapa_bloquesh;
 		unordered_map<string,int> mapa_visitas;
 
-		void MinCostFlow();
+		vector<pair<string,string>> MinCostFlow();
 
 		int getMaxVisitasDePersona(string idPersona);
 		MiniBitmap* getBloquesDispDePersona(string idPersona);
