@@ -170,6 +170,7 @@ InstanceInput::InstanceInput(string filename){
 	visita_vehiculos = vector<MiniBitmap*>(l);
 	visita_testimado_bloques = vector<int>(l);
 	visita_prioridad = vector<int>(l);
+	visita_cant_personas = vector<int>(l);
 	for(int i=0; i < l; i++){
 		// Cada línea cotiene:
 		// id_visita id_bloque_inicio id_bloque_fin personas (n bits) vehículos (m bits) bloques_duracion prioridad
@@ -198,8 +199,8 @@ InstanceInput::InstanceInput(string filename){
 		}
 		visita_vehiculos[i]->printBitmap();
 		cout << " ";
-		iss >> visita_testimado_bloques[i] >> visita_prioridad[i];
-		cout << visita_testimado_bloques[i] << " " << visita_prioridad[i] << endl;
+		iss >> visita_testimado_bloques[i] >> visita_prioridad[i] >> visita_cant_personas[i];
+		cout << visita_testimado_bloques[i] << " " << visita_prioridad[i] << " " << visita_cant_personas[i] << endl;
 
 		mapa_visitas[visita_id[i]] = i;
 	}
@@ -270,11 +271,12 @@ vector<pair<string,string>> InstanceInput::MinCostFlow(){
 		}
 	}
 
-	// 3- Visitas a sink
+	int supply = 0;
+	// 3- Aristas desde Visitas a sink
 	destino = 1+n+l;
 	for(int i=0; i<l; i++){
 		origen = n+1+i;
-		capacidad = 1;
+		capacidad = visita_cant_personas[i];
 		costo = 1;
 		cout << origen << " " << destino << " " << capacidad << " " << costo << endl;
 
@@ -282,12 +284,13 @@ vector<pair<string,string>> InstanceInput::MinCostFlow(){
 		operations_research::ArcIndex arc = graph.AddArc(origen, destino);
 		min_cost_flow.SetArcCapacity(arc, capacidad);
 		min_cost_flow.SetArcUnitCost(arc, costo);
+		supply += capacidad;
 	}
 
 	// Lo que debe ir a .SetNodeSupply(·,·)
 	// 1- Source:
-	cout << "0 " << l << endl;
-	min_cost_flow.SetNodeSupply(0, l);
+	cout << "0 " << supply << endl;
+	min_cost_flow.SetNodeSupply(0, supply);
 	// 2- Vértices de personas y visitas en 0
 	for(int i=1; i <= (n+l); i++){
 		cout << i << " 0" << endl;
@@ -295,8 +298,8 @@ vector<pair<string,string>> InstanceInput::MinCostFlow(){
 	}
 	// 3- Sink
 	int aux = n+l+1;
-	cout << aux << " -" << l << endl;
-	min_cost_flow.SetNodeSupply(aux, -l);
+	cout << aux << " -" << supply << endl;
+	min_cost_flow.SetNodeSupply(aux, -supply);
 
 	// Copy-Paste del ejemplo:
 

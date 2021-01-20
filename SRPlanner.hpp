@@ -56,6 +56,7 @@ class InstanceInput{
 		vector<MiniBitmap*> visita_vehiculos;
 		vector<int> visita_testimado_bloques;
 		vector<int> visita_prioridad;
+		vector<int>	visita_cant_personas;
 
 		unordered_map<string,int> mapa_personas;
 		unordered_map<string,int> mapa_vehiculos;
