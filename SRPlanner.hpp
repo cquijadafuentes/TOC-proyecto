@@ -7,6 +7,10 @@
 #include <algorithm>
 #include <unordered_map>
 #include "MiniBitmap.hpp"
+
+#include "ortools/graph/min_cost_flow.h"
+#include "ortools/base/logging.h"
+
 using namespace std;
 
 time_t obtenerTime(string ts);

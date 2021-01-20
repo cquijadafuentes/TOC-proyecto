@@ -1,5 +1,13 @@
 #include "SRPlanner.hpp"
 
+namespace operations_research {
+struct Arc {
+  std::pair<NodeIndex, NodeIndex> nodes;
+  FlowQuantity capacity;
+  FlowQuantity unit_cost;
+};
+}
+
 time_t obtenerTime(string ts){
 	time_t t;
 	//return t;
@@ -225,6 +233,10 @@ void InstanceInput::MinCostFlow(){
 	}
 	cout << "Cant. de aristas: " << caristas << endl;
 
+// Iniciar StarGraph y MinCostFlow
+	operations_research::StarGraph graph(cvertices, caristas);
+	operations_research::MinCostFlow min_cost_flow(&graph);
+
 	// Se imprime por fila, lo que se debería entregar a .AddArcWithCapacityAndUnitCost(·,·,·,·)
 	int origen, destino, capacidad, costo;
 	// 1- Desde source a cada persona.
@@ -234,6 +246,11 @@ void InstanceInput::MinCostFlow(){
 		capacidad = pers_maxvisitas[i];
 		costo = 1; 		// ToDo: Esto se debería calcular más adelante
 		cout << origen << " " << destino << " " << capacidad << " " << costo << endl;
+		
+// Incorporando arcos
+		operations_research::ArcIndex arc = graph.AddArc(origen, destino);
+		min_cost_flow.SetArcCapacity(arc, capacidad);
+		min_cost_flow.SetArcUnitCost(arc, costo);
 	}
 	// 2- Personas a visitas
 	for(int i=0; i<l; i++){
@@ -244,6 +261,11 @@ void InstanceInput::MinCostFlow(){
 				capacidad = 1; 		// ToDo: Calcular capacidad (?) de visita de la persona j a la obra i
 				costo = 1;			// ToDo: Calcular costo de visita de la persona j a la obra i
 				cout << origen << " " << destino << " " << capacidad << " " << costo << endl;
+
+// Incorporando arcos
+				operations_research::ArcIndex arc = graph.AddArc(origen, destino);
+				min_cost_flow.SetArcCapacity(arc, capacidad);
+				min_cost_flow.SetArcUnitCost(arc, costo);
 			}
 		}
 	}
@@ -255,18 +277,46 @@ void InstanceInput::MinCostFlow(){
 		capacidad = 1;
 		costo = 1;
 		cout << origen << " " << destino << " " << capacidad << " " << costo << endl;
+
+// Incorporando arcos
+		operations_research::ArcIndex arc = graph.AddArc(origen, destino);
+		min_cost_flow.SetArcCapacity(arc, capacidad);
+		min_cost_flow.SetArcUnitCost(arc, costo);
 	}
 
 	// Lo que debe ir a .SetNodeSupply(·,·)
 	// 1- Source:
 	cout << "0 " << l << endl;
+	min_cost_flow.SetNodeSupply(0, l);
 	// 2- Vértices de personas y visitas en 0
 	for(int i=1; i <= (n+l); i++){
 		cout << i << " 0" << endl;
+		min_cost_flow.SetNodeSupply(i, 0);
 	}
 	// 3- Sink
 	int aux = n+l+1;
 	cout << aux << " -" << l << endl;
+	min_cost_flow.SetNodeSupply(aux, -l);
+
+	// Copy-Paste del ejemplo:
+
+	LOG(INFO) << "Solving min cost flow with: " << graph.num_nodes()
+			<< " nodes, and " << graph.num_arcs() << " arcs.";
+
+	// Find the maximum flow between node 0 and node 4.
+	min_cost_flow.Solve();
+	if (operations_research::MinCostFlow::OPTIMAL != min_cost_flow.status()) {
+		LOG(FATAL) << "Solving the max flow is not optimal!";
+	}
+	operations_research::FlowQuantity total_flow_cost = min_cost_flow.GetOptimalCost();
+	LOG(INFO) << "Minimum cost flow: " << total_flow_cost;
+	LOG(INFO) << "";
+	LOG(INFO) << "Arc   : Flow / Capacity / Cost";
+	for (int i = 0; i < caristas; ++i) {
+		LOG(INFO) << graph.Tail(i) << " -> " << graph.Head(i) << ": "
+				<< min_cost_flow.Flow(i) << " / " << min_cost_flow.Capacity(i)
+				<< " / " << min_cost_flow.UnitCost(i);
+	}
 
 }
 
@@ -403,14 +453,14 @@ time_t InstanceInput::getInicioVentanaVisita(string idVisita){
 	// Encontrar la id del blque en que inicia la ventanan de la visita
 	unordered_map<string,int>::const_iterator ipos = mapa_visitas.find(idVisita);
 	if(ipos == mapa_visitas.end()){
-		return NULL;
+		return 0;	// ToDo: Revisar si 0 es equivalente a nada.
 	}
 	string idBInicio = visita_bloque_inicio[ipos->second];
 
 	// Encontrar el time_t donde inicia el último bloque de la visita
 	ipos = mapa_bloquesh.find(idBInicio);
 	if(ipos == mapa_visitas.end()){
-		return NULL;
+		return 0;	// ToDo: Revisar si 0 es equivalente a nada.
 	}
 	return bloque_timestamp[ipos->second];
 }
@@ -420,14 +470,14 @@ time_t InstanceInput::getFinVetanaVisita(string idVisita){
 	// Encontrar la id del blque en que termina la ventanan de la visita
 	unordered_map<string,int>::const_iterator ipos = mapa_visitas.find(idVisita);
 	if(ipos == mapa_visitas.end()){
-		return NULL;
+		return 0; // ToDo: Revisar si 0 es equivalente a nada.
 	}
 	string idBFin = visita_bloque_fin[ipos->second];
 
 	// Encontrar el time_t donde inicia el último bloque de la visita
 	ipos = mapa_bloquesh.find(idBFin);
 	if(ipos == mapa_visitas.end()){
-		return NULL;
+		return 0; // ToDo: Revisar si 0 es equivalente a nada.
 	}
 	time_t inicioBFin = bloque_timestamp[ipos->second];
 
@@ -572,11 +622,12 @@ InstanceSolution::InstanceSolution(){
 bool InstanceSolution::validarInstancia(){
 	cout << "validarInstancia" << endl;
 
-	
+	return false;
 }
 
 double InstanceSolution::evaluarInstancia(){
 	cout << "evaluarInstancia" << endl;
 
-	
+	return 0.0;
 }
+
