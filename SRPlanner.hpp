@@ -52,6 +52,14 @@ class InstanceInput{
 
 		void MinCostFlow();
 
+		MiniBitmap* getPersonasParaVisita(string idVisita);
+		MiniBitmap* getVehiculosParaVisita(string idVisita);
+		int getPrioridadVisita(string idVisita);
+		int getTiempoEstimadoVisita(string idVisita);
+		time_t getInicioVentanaVisita(string idVisita);
+		time_t getFinVetanaVisita(string idVisita);
+
+
 	private:
 };
 

@@ -255,6 +255,39 @@ void InstanceInput::MinCostFlow(){
 }
 
 
+
+MiniBitmap* InstanceInput::getPersonasParaVisita(string idVisita){
+	return NULL;
+}
+
+
+MiniBitmap* InstanceInput::getVehiculosParaVisita(string idVisita){
+	return NULL;
+}
+
+
+int InstanceInput::getPrioridadVisita(string idVisita){
+	return 0;
+}
+
+
+int InstanceInput::getTiempoEstimadoVisita(string idVisita){
+	return 0;
+}
+
+
+time_t InstanceInput::getInicioVentanaVisita(string idVisita){
+	return 0;
+}
+
+
+time_t InstanceInput::getFinVetanaVisita(string idVisita){
+	return 0;
+}
+
+
+
+
 //	***********************************************************
 //	********************** CLASE TRASLADO *********************
 //	***********************************************************
