@@ -61,6 +61,7 @@ class InstanceInput{
 
 
 	private:
+		int getPosicionVisita(string idVisita);
 };
 
 class Traslado{

@@ -256,6 +256,9 @@ void InstanceInput::MinCostFlow(){
 
 
 
+
+
+
 MiniBitmap* InstanceInput::getPersonasParaVisita(string idVisita){
 	return NULL;
 }
@@ -282,6 +285,11 @@ time_t InstanceInput::getInicioVentanaVisita(string idVisita){
 
 
 time_t InstanceInput::getFinVetanaVisita(string idVisita){
+	return 0;
+}
+
+
+int InstanceInput::getPosicionVisita(string idVisita){
 	return 0;
 }
 
