@@ -19,3 +19,5 @@ class MiniBitmap{
 		int* bitmap;		// Arreglo de enteros para almacenar los bits
 		int ints;			// Cantidad de enteros para el bitmap
 };
+
+

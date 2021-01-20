@@ -19,6 +19,13 @@ string stringTime(time_t t){
 	return aux.substr(0,aux.length()-1);
 }
 
+time_t sumaMinutos(time_t t, int m){
+	struct tm tm = *localtime(&t);
+	tm.tm_min += m;
+	time_t nt = mktime(&tm);
+	return nt;
+}
+
 //	***********************************************************
 //	******************* CLASE INSTANCE INPUT ******************
 //	***********************************************************
@@ -86,8 +93,9 @@ InstanceInput::InstanceInput(string filename){
 		}
 		pers_prefvisita[i]->printBitmap();
 		cout << " ";
-
 		cout << endl;
+
+		mapa_personas[pers_id[i]] = i;
 	}
 
 	// Lectura de m líneas con la información de los vehículos
@@ -101,12 +109,14 @@ InstanceInput::InstanceInput(string filename){
 		iss = istringstream(linea);
 		iss >> vehi_id[i] >> vehi_cap[i] >> vehi_cost[i];
 		cout << vehi_id[i] << " " << vehi_cap[i] << " " << vehi_cost[i] << endl;
+
+		mapa_vehiculos[vehi_id[i]] = i;
 	}
 
 	// Lectura de k líneas con las distancias entre ubicaciones
 	// Nota: primera ubicación siempre es SERVIU
 	ubica_id = vector<string>(k);
-	ubica_dist_mins = vector<pair<double,int>>(k);
+	ubica_dist_mins = vector<vector<pair<double,int>>>(k,vector<pair<double,int>>(k));
 	for(int i=0; i < k; i++){
 		// Cada línea cotiene:
 		// id_ubicacion k pares distancia,tiempo
@@ -119,10 +129,12 @@ InstanceInput::InstanceInput(string filename){
 		int auxtime;
 		for(int j=0; j<k; j++){
 			iss >> auxdist >> auxtime;
-			ubica_dist_mins[j] = make_pair(auxdist,auxtime);
-			cout << "(" << ubica_dist_mins[j].first << "-" << ubica_dist_mins[j].second << ") ";
+			ubica_dist_mins[i][j] = make_pair(auxdist,auxtime);
+			cout << "(" << ubica_dist_mins[i][j].first << "-" << ubica_dist_mins[i][j].second << ") ";
 		}
 		cout << endl;
+
+		mapa_ubicaciones[ubica_id[i]] = i;
 	}
 
 	// Lectura de h líneas con al información de bloques horarios
@@ -137,6 +149,8 @@ InstanceInput::InstanceInput(string filename){
 		iss >> bloque_id[i] >> auxstring;
 		bloque_timestamp[i] = obtenerTime(auxstring);
 		cout << bloque_id[i] << " " << ctime(&bloque_timestamp[i]);
+
+		mapa_bloquesh[bloque_id[i]] = i;
 	}
 
 	// Lectura de l líneas con al información de las visitas
@@ -178,6 +192,8 @@ InstanceInput::InstanceInput(string filename){
 		cout << " ";
 		iss >> visita_testimado_bloques[i] >> visita_prioridad[i];
 		cout << visita_testimado_bloques[i] << " " << visita_prioridad[i] << endl;
+
+		mapa_visitas[visita_id[i]] = i;
 	}
 }
 
@@ -255,45 +271,169 @@ void InstanceInput::MinCostFlow(){
 }
 
 
+int InstanceInput::getMaxVisitasDePersona(string idPersona){
+	unordered_map<string,int>::const_iterator ipos = mapa_personas.find(idPersona);
+	if(ipos == mapa_personas.end()){
+		return -1;
+	}
+	return pers_maxvisitas[ipos->second];
+}
 
 
+MiniBitmap* InstanceInput::getBloquesDispDePersona(string idPersona){
+	unordered_map<string,int>::const_iterator ipos = mapa_personas.find(idPersona);
+	if(ipos == mapa_personas.end()){
+		return NULL;
+	}
+	return pers_horasdisp[ipos->second];
+}
+
+
+MiniBitmap* InstanceInput::getPersonasAfinesDePersona(string idPersona){
+	unordered_map<string,int>::const_iterator ipos = mapa_personas.find(idPersona);
+	if(ipos == mapa_personas.end()){
+		return NULL;
+	}
+	return pers_afin[ipos->second];
+}
+
+
+MiniBitmap* InstanceInput::getPrefVisitaDePersona(string idPersona){
+	unordered_map<string,int>::const_iterator ipos = mapa_personas.find(idPersona);
+	if(ipos == mapa_personas.end()){
+		return NULL;
+	}
+	return pers_prefvisita[ipos->second];
+}
+
+
+int InstanceInput::getCapacidadVehiculo(string idVehiculo){
+	unordered_map<string,int>::const_iterator ipos = mapa_vehiculos.find(idVehiculo);
+	if(ipos == mapa_vehiculos.end()){
+		return -1;
+	}
+	return vehi_cap[ipos->second];
+}
+
+
+int InstanceInput::getCostoVehiculo(string idVehiculo){
+	unordered_map<string,int>::const_iterator ipos = mapa_vehiculos.find(idVehiculo);
+	if(ipos == mapa_vehiculos.end()){
+		return -1;
+	}
+	return vehi_cost[ipos->second];
+}
+
+
+int InstanceInput::getTiempoTraslado(string idUbOr, string idUbDes){
+	// Encontrar pos de la ubicación de origen
+	unordered_map<string,int>::const_iterator ipos = mapa_ubicaciones.find(idUbOr);
+	if(ipos == mapa_ubicaciones.end()){
+		return -1;
+	}
+	int pOrigen = ipos->second;
+
+	// Encontrar pos de la ubicación de destino
+	ipos = mapa_ubicaciones.find(idUbDes);
+	if(ipos == mapa_ubicaciones.end()){
+		return -1;
+	}
+	int pDestino = ipos->second;
+
+	return ubica_dist_mins[pOrigen][pDestino].second;
+}
+
+
+int InstanceInput::getDistanciaTraslado(string idUbOr, string idUbDes){
+	// Encontrar pos de la ubicación de origen
+	unordered_map<string,int>::const_iterator ipos = mapa_ubicaciones.find(idUbOr);
+	if(ipos == mapa_ubicaciones.end()){
+		return -1;
+	}
+	int pOrigen = ipos->second;
+
+	// Encontrar pos de la ubicación de destino
+	ipos = mapa_ubicaciones.find(idUbDes);
+	if(ipos == mapa_ubicaciones.end()){
+		return -1;
+	}
+	int pDestino = ipos->second;
+
+	return ubica_dist_mins[pOrigen][pDestino].first;
+}
 
 
 MiniBitmap* InstanceInput::getPersonasParaVisita(string idVisita){
-	return NULL;
+	unordered_map<string,int>::const_iterator ipos = mapa_visitas.find(idVisita);
+	if(ipos == mapa_visitas.end()){
+		return NULL;
+	}
+	return visita_personas[ipos->second];
 }
 
 
 MiniBitmap* InstanceInput::getVehiculosParaVisita(string idVisita){
-	return NULL;
+	unordered_map<string,int>::const_iterator ipos = mapa_visitas.find(idVisita);
+	if(ipos == mapa_visitas.end()){
+		return NULL;
+	}
+	return visita_vehiculos[ipos->second];
 }
 
 
 int InstanceInput::getPrioridadVisita(string idVisita){
-	return 0;
+	unordered_map<string,int>::const_iterator ipos = mapa_visitas.find(idVisita);
+	if(ipos == mapa_visitas.end()){
+		return -1;
+	}
+	return visita_prioridad[ipos->second];
 }
 
 
 int InstanceInput::getTiempoEstimadoVisita(string idVisita){
-	return 0;
+	unordered_map<string,int>::const_iterator ipos = mapa_visitas.find(idVisita);
+	if(ipos == mapa_visitas.end()){
+		return -1;
+	}
+	return visita_testimado_bloques[ipos->second];
 }
 
 
 time_t InstanceInput::getInicioVentanaVisita(string idVisita){
-	return 0;
+	// Encontrar la id del blque en que inicia la ventanan de la visita
+	unordered_map<string,int>::const_iterator ipos = mapa_visitas.find(idVisita);
+	if(ipos == mapa_visitas.end()){
+		return NULL;
+	}
+	string idBInicio = visita_bloque_inicio[ipos->second];
+
+	// Encontrar el time_t donde inicia el último bloque de la visita
+	ipos = mapa_bloquesh.find(idBInicio);
+	if(ipos == mapa_visitas.end()){
+		return NULL;
+	}
+	return bloque_timestamp[ipos->second];
 }
 
 
 time_t InstanceInput::getFinVetanaVisita(string idVisita){
-	return 0;
+	// Encontrar la id del blque en que termina la ventanan de la visita
+	unordered_map<string,int>::const_iterator ipos = mapa_visitas.find(idVisita);
+	if(ipos == mapa_visitas.end()){
+		return NULL;
+	}
+	string idBFin = visita_bloque_fin[ipos->second];
+
+	// Encontrar el time_t donde inicia el último bloque de la visita
+	ipos = mapa_bloquesh.find(idBFin);
+	if(ipos == mapa_visitas.end()){
+		return NULL;
+	}
+	time_t inicioBFin = bloque_timestamp[ipos->second];
+
+	// Sumar el tiempo del bloque para tener el tiempo límite
+	return sumaMinutos(inicioBFin,z);
 }
-
-
-int InstanceInput::getPosicionVisita(string idVisita){
-	return 0;
-}
-
-
 
 
 //	***********************************************************
