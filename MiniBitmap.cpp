@@ -88,6 +88,7 @@ void MiniBitmap::printBitmap(){
 }
 
 
+// Veradero si THIS es subconjunto de subConj
 bool MiniBitmap::esSubconjunto(MiniBitmap* supConj){
 	// Si es nulo el parámetro o si tienen diferente capacidad
 	if(supConj == NULL || cap != supConj->cap){
