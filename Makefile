@@ -2,7 +2,7 @@ CPP=g++
 
 OBJETOS=MiniBitmap.o SRPlanner.o
 
-BINS=test_minibitmap load_input checker_output \
+BINS=test_minibitmap test_minibitmap_subc load_input checker_output \
 		generate_input  SRPlanner_test SRPlanner_checker \
 		SRPlanner_mincostf
 
@@ -17,6 +17,9 @@ bin: $(OBJETOS) $(BINS)
 
 test_minibitmap:
 	$(CPP) $(CPPFLAGS) -o ./old/test_minibitmap old/test_minibitmap.cpp $(OBJETOS)
+
+test_minibitmap_subc:
+	$(CPP) $(CPPFLAGS) -o ./old/test_minibitmap_subc old/test_minibitmap_subc.cpp $(OBJETOS)
 
 load_input:
 	$(CPP) $(CPPFLAGS) -o ./old/load_input old/load_input.cpp $(OBJETOS)
@@ -37,5 +40,5 @@ SRPlanner_mincostf:
 	$(CPP) $(CPPFLAGS) -o ./SRPlanner_mincostf SRPlanner_mincostf.cpp $(OBJETOS)
 
 clean:
-	rm -f $(OBJETOS) $(BINS) old/test_minibitmap old/load_input old/checker_output
+	rm -f $(OBJETOS) $(BINS) old/test_minibitmap old/test_minibitmap_subc old/load_input old/checker_output
 	cd .; rm -f *.a $(BINS)
