@@ -249,6 +249,10 @@ int main(int argc, char const *argv[]){
 		// Prioridad (de 1 a 5)
 		int prioridad = rand() % 5 + 1;
 		os << " " << prioridad;
+
+		// Cantidad de personas para visita
+		int cantPer = (rand() % 3) + 1;		// 1 a 3
+		os << " " << cantPer;
 		os << endl;
 	}
 
