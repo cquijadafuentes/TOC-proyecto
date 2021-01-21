@@ -19,6 +19,21 @@ string stringTime(time_t t);
 
 time_t sumaMinutos(time_t t, int m);
 
+
+class InstanceSolution{
+	public:
+		vector<pair<pair<string,string>,string>> instance;	// vector para < < idbloque - idpersona > - idvisita/idvehiculo >
+
+		InstanceSolution();
+		~InstanceSolution();
+
+		bool validarInstancia();
+		double evaluarInstancia();
+
+		InstanceSolution* generarVecinos();
+};
+
+
 class InstanceInput{
 	public:
 		InstanceInput(string filename);
@@ -65,6 +80,7 @@ class InstanceInput{
 		unordered_map<string,int> mapa_visitas;
 
 		vector<pair<string,string>> MinCostFlow();
+		InstanceSolution instanciaInicial();
 
 		int getMaxVisitasDePersona(string idPersona);
 		MiniBitmap* getBloquesDispDePersona(string idPersona);
@@ -106,6 +122,7 @@ class Traslado{
 
 };
 
+
 class InstanceOutput{
 	public:
 		int n;			// Cantidad de Personas
@@ -116,7 +133,9 @@ class InstanceOutput{
 		vector<Traslado*> tr;
 		
 		InstanceOutput(string filename, int nn, int mm, int kk, int ll);
+		InstanceOutput(InstanceSolution solucion);
 		~InstanceOutput();
+		void generarFichero(string filename);
 
 		void sortByIdVehiculoFecha();
 		int validaViajesPorVehiculos();
@@ -124,13 +143,14 @@ class InstanceOutput{
 		static bool comparadorIdVehiculoFecha(Traslado* i1, Traslado* i2);
 };
 
-class InstanceSolution{
+
+class Solver{
 	public:
-		vector<pair<pair<string,string>,string>> instance;	// vector para < < idbloque - idpersona > - idvisita/idvehiculo >
+		InstanceInput* ii;
+		InstanceSolution is_actual;
+		Solver(string filename);
+		~Solver();
 
-		InstanceSolution();
-		~InstanceSolution();
-
-		bool validarInstancia();
-		double evaluarInstancia();
+		void SolucionPorBusquedaLocal(string outputFileName);
+	private:
 };

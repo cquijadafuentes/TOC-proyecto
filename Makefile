@@ -2,9 +2,9 @@ CPP=g++
 
 OBJETOS=MiniBitmap.o
 
-BINS=generate_input  SRPlanner_test SRPlanner_checker \
-		SRPlanner_mincostf \
-		test_minibitmap test_minibitmap_subc
+BINS=test_minibitmap test_minibitmap_subc generate_input\
+		SRPlanner_test SRPlanner_checker \
+		SRPlanner_mincostf SRPlanner_solucionar
 
 SRP=SRPlanner
 
@@ -44,6 +44,9 @@ SRPlanner_checker:
 
 SRPlanner_mincostf:
 	$(CPP) $(ORTOOLSFLAGS) -o ./SRPlanner_mincostf SRPlanner_mincostf.cpp $(OBJETOS) SRPlanner.o
+
+SRPlanner_solucionar:
+	$(CPP) $(ORTOOLSFLAGS) -o ./SRPlanner_solucionar SRPlanner_solucionar.cpp $(OBJETOS) SRPlanner.o
 
 clean:
 	rm -f $(OBJETOS) $(BINS)

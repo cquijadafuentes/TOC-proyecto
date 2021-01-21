@@ -34,6 +34,38 @@ time_t sumaMinutos(time_t t, int m){
 	return nt;
 }
 
+
+
+//	**********************************************************
+//	***************** CLASE INSTANCE SOLUTION ****************
+//	**********************************************************
+Solver::Solver(string filename){
+	// Cargar la información
+	ii = new InstanceInput(filename);
+	// Generar solución inicial
+	is_actual = ii->instanciaInicial();
+
+}
+
+
+Solver::~Solver(){
+	if(ii != NULL){
+		delete ii;
+	}
+}
+
+
+void Solver::SolucionPorBusquedaLocal(string outputFileName){
+	// Ejecutar búsqueda
+
+
+	// Generar archivo con la salida de los datos.
+	InstanceOutput salida = (is_actual);
+	salida.generarFichero(outputFileName);
+}
+
+
+
 //	***********************************************************
 //	******************* CLASE INSTANCE INPUT ******************
 //	***********************************************************
@@ -322,6 +354,21 @@ vector<pair<string,string>> InstanceInput::MinCostFlow(){
 }
 
 
+
+InstanceSolution InstanceInput::instanciaInicial(){
+	// Generar asignación inicial personas-visitas
+	vector <pair<string,string>> insIn = MinCostFlow();
+
+	// Generar asignación con bloques horarios
+
+
+	// Generar asignación con vehículos
+
+
+	return InstanceSolution();
+}
+
+
 int InstanceInput::getMaxVisitasDePersona(string idPersona){
 	unordered_map<string,int>::const_iterator ipos = mapa_personas.find(idPersona);
 	if(ipos == mapa_personas.end()){
@@ -591,6 +638,12 @@ InstanceOutput::InstanceOutput(string filename, int nn, int mm, int kk, int ll){
 	}
 }
 
+InstanceOutput::InstanceOutput(InstanceSolution solucion){
+	// ToDo: generar formato InstanceSolution (vector de traslados) desde la solución.
+
+}
+
+
 InstanceOutput::~InstanceOutput(){
 	cout << "Eliminando InstanceOutput..." << endl;
 	for(int i=0; i < t; i++){
@@ -598,9 +651,16 @@ InstanceOutput::~InstanceOutput(){
 	}
 }
 
+
+void InstanceOutput::generarFichero(string filename){
+	// ToDo: sacar a fichero el formato de salida
+}
+
+
 void InstanceOutput::sortByIdVehiculoFecha(){
 	sort(tr.begin(), tr.end(), InstanceOutput::comparadorIdVehiculoFecha);
 }
+
 
 bool InstanceOutput::comparadorIdVehiculoFecha(Traslado* i1, Traslado* i2){
 	if(i1->idvehi.compare(i2->idvehi) == 0){
@@ -608,6 +668,7 @@ bool InstanceOutput::comparadorIdVehiculoFecha(Traslado* i1, Traslado* i2){
 	}
 	return i1->idvehi.compare(i2->idvehi) < 0;
 }
+
 
 int InstanceOutput::validaViajesPorVehiculos(){
 	cout << "Traslados por idVehículo:" << endl;
@@ -643,10 +704,16 @@ string Traslado::toString(){
 
 
 InstanceSolution::InstanceSolution(){
-	cout << "InstanceSolution" << endl;
-
+	cout << "Creando InstanceSolution" << endl;
 	
 }
+
+
+InstanceSolution::~InstanceSolution(){
+	cout << "Borrando InstanceSolution" << endl;
+	
+}
+
 
 bool InstanceSolution::validarInstancia(){
 	cout << "validarInstancia" << endl;
@@ -654,9 +721,16 @@ bool InstanceSolution::validarInstancia(){
 	return false;
 }
 
+
 double InstanceSolution::evaluarInstancia(){
 	cout << "evaluarInstancia" << endl;
 
 	return 0.0;
+}
+
+
+InstanceSolution* InstanceSolution::generarVecinos(){
+
+	return NULL;
 }
 
