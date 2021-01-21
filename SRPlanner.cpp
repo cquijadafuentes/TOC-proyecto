@@ -730,6 +730,7 @@ double InstanceSolution::evaluarInstancia(){
 
 
 InstanceSolution* InstanceSolution::generarVecinos(){
+	// ToDo: Generar vecinos
 
 	return NULL;
 }
