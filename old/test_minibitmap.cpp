@@ -13,8 +13,8 @@ int main(int argc, char const *argv[]){
 	cout << endl;
 
 	cout << "Insertando: " << endl;
-	for(int j=0; j<5; j++){
 	int aux;
+	for(int j=0; j<5; j++){
 		cin >> aux;
 		x->setBit(aux);
 		x->printBitmap();
@@ -22,13 +22,19 @@ int main(int argc, char const *argv[]){
 	}
 	cout << "Eliminando: " << endl;
 	for(int j=0; j<3; j++){
-	int aux;
 		cin >> aux;
 		x->unsetBit(aux);
 		x->printBitmap();
 		cout << endl;
 	}
 	x->printInfo();
+	cout << "Count: posición inicial: ";
+	cin >> aux;
+	int aux2;
+	cout << "Count: posición final: ";
+	cin >> aux2;
+	int count = x->count(aux, aux2);
+	cout << "Count(" << aux << "," << aux2 << "): " << count << endl;
 	delete(x);
 	return 0;
 }

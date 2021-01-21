@@ -114,3 +114,40 @@ bool MiniBitmap::esSubconjunto(MiniBitmap* supConj){
 	}
 	return true;
 }
+
+
+// Cuenta la cantidad de 1s (unos) que hay entre dos posiciones (incluyéndolas)
+int MiniBitmap::count(int pInicial, int pFinal){
+	if(pInicial > pFinal){
+		int aux = pFinal;
+		pFinal = pInicial;
+		pInicial = aux;
+	}
+	if(pInicial < 0){
+		pInicial = 0;
+	}
+	if(pFinal > cap){
+		pFinal = cap - 1;
+	}
+	if(pInicial == 0 && pFinal == cap - 1){
+		return cant;
+	}
+	int posInt = pInicial / bits_int;
+	int posBit = pInicial % bits_int;
+	int mascara = 1 << posBit;
+	int count = 0;
+	for(int pos = pInicial ; pos <= pFinal; pos++){
+		if((bitmap[posInt] & mascara) != 0){
+			count++;
+		}
+		posBit++;
+		if(posBit == bits_int){
+			mascara = 1;
+			posBit = 0; 
+			posInt++;
+		}else{
+			mascara = mascara << 1;
+		}
+	}
+	return count;
+}

@@ -16,6 +16,7 @@ class MiniBitmap{
 		void printInfo();
 		void printBitmap();
 		bool esSubconjunto(MiniBitmap* supConj);
+		int count(int pInicial, int pFinal);
 	private:
 		int* bitmap;		// Arreglo de enteros para almacenar los bits
 		int ints;			// Cantidad de enteros para el bitmap

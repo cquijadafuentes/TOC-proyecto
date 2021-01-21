@@ -84,6 +84,8 @@ class InstanceInput{
 		time_t getInicioVentanaVisita(string idVisita);
 		time_t getFinVetanaVisita(string idVisita);
 
+		bool personaPuedeVisitar(int posPersona, int posVisita);
+
 
 	private:
 };

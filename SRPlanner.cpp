@@ -256,7 +256,7 @@ vector<pair<string,string>> InstanceInput::MinCostFlow(){
 	// 2- Personas a visitas
 	for(int i=0; i<l; i++){
 		for(int j=0; j<n; j++){
-			if(visita_personas[i]->access(j) == 1){
+			if(visita_personas[i]->access(j) == 1 && personaPuedeVisitar(j,i)){
 				origen = j+1;
 				destino = n+1+i;
 				capacidad = 1; 		// ToDo: Calcular capacidad (?) de visita de la persona j a la obra i
@@ -484,6 +484,34 @@ time_t InstanceInput::getFinVetanaVisita(string idVisita){
 
 	// Sumar el tiempo del bloque para tener el tiempo límite
 	return sumaMinutos(inicioBFin,z);
+}
+
+bool InstanceInput::personaPuedeVisitar(int posPersona, int posVisita){
+	// Verificar si hay intersección entre el horario de la persona y la ventana de visita
+	// Basado en la cantidad de bloques que tiene la persona en la ventana
+	// (Podría ser en la cantidad de bloques contiguos del mismo día, pero por ahora no)
+
+	// Encontrar IDs de los bloques para las ventanas
+	string idBloqueInicial = visita_bloque_inicio[posVisita];
+	unordered_map<string,int>::const_iterator ipos = mapa_bloquesh.find(idBloqueInicial);
+	if(ipos == mapa_visitas.end()){
+		return false;
+	}
+	int numBloqueInicial = ipos->second;
+
+	string idBloqueFinal = visita_bloque_fin[posVisita];
+	ipos = mapa_bloquesh.find(idBloqueFinal);
+	if(ipos == mapa_visitas.end()){
+		return false;
+	}
+	int numBloqueFinal = ipos->second;
+
+	// Calcular cantidad de bloques disponibles
+	int bloquesInter = pers_horasdisp[posPersona]->count(numBloqueInicial,numBloqueFinal);
+	if(bloquesInter < visita_testimado_bloques[posVisita]){
+		return false;
+	}
+	return true;
 }
 
 
