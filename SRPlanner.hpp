@@ -19,10 +19,17 @@ string stringTime(time_t t);
 
 time_t sumaMinutos(time_t t, int m);
 
+struct Cuarteta{
+	string idbh;
+	string idp;
+	string idve;
+	string idvi;
+};
+
 
 class InstanceSolution{
 	public:
-		vector<pair<pair<string,string>,string>> instance;	// vector para < < idbloque - idpersona > - idvisita/idvehiculo >
+		vector<Cuarteta> instance;	// vector para persona, horario, vehículo o visita.
 
 		InstanceSolution();
 		~InstanceSolution();
