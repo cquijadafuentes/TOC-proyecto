@@ -1,0 +1,11 @@
+*.o
+
+*.exe
+
+test_minibitmap
+test_minibitmap_subc
+generate_input
+SRPlanner_test
+SRPlanner_checker
+SRPlanner_mincostf
+SRPlanner_solucionar

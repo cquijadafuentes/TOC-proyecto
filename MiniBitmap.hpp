@@ -1,3 +1,6 @@
+#include MINIBITMAP
+#define MINIBITMAP
+
 #include <iostream>
 
 using namespace std;
@@ -22,4 +25,4 @@ class MiniBitmap{
 		int ints;			// Cantidad de enteros para el bitmap
 };
 
-
+#endif
