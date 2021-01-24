@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <cmath>
 #include <algorithm>
+#include "MiniBitmap.hpp"
 
 using namespace std;
 
@@ -52,16 +53,23 @@ int main(int argc, char const *argv[]){
 
 		// visitas_maximas
 		int* aux = new int[h];
+		int intaux;
 		for(int j=0; j<h; j++){
-			aux[j] = 1;
+			intaux = (rand() % (l-2)) + 2;
 		}
-		// Bloques que no serán de visitas para la persona
-		int cantNo = rand() % (h/2); // max 50%
-		for(int j=0; j<cantNo; j++){
-			aux[(rand() % h)] = 0;
+		os << " " << intaux;
+		// Bloques que serán de visitas para la persona
+		int cantSi = (rand() % (h/2)) + (h/2); // min 50%
+		MiniBitmap mb(h);
+		int cantbloques2horas = 120 / z;
+		while(mb.cant < cantSi){
+			intaux = rand() % h;
+			for(int j=0;j<cantbloques2horas; j++){
+				mb.setBit((intaux+j));
+			}
 		}
-		for(int j=0; j<n; j++){
-			os << " " << aux[j];
+		for(int j=0; j<h; j++){
+			os << " " << mb.access(j);
 		}
 		delete aux;
 
@@ -71,7 +79,7 @@ int main(int argc, char const *argv[]){
 			aux[j] = 1;
 		}
 		// Personas que no serán afines
-		cantNo = rand() % (n/2); // max 50%
+		int cantNo = rand() % (n/2); // max 50%
 		for(int j=0; j<cantNo; j++){
 			aux[(rand() % n)] = 0;
 		}
@@ -233,9 +241,15 @@ int main(int argc, char const *argv[]){
 			aux[j] = 0;
 		}
 		// Personas que pueden hacer la visita
-		cantSi = rand() % (m/2) + 3; // max 50%
+		cantSi = rand() % (m/2 - 3) + 3; // max 50% min 3
+		int conteoPersonas = 0;
+		int posAux;
 		for(int j=0; j<cantSi; j++){
-			aux[(rand() % m)] = 1;
+			posAux = (rand() % m);
+			if(aux[posAux] == 0){
+				conteoPersonas++;
+			}
+			aux[posAux] = 1;
 		}
 		for(int j=0; j<m; j++){
 			os << " " << aux[j];
@@ -252,6 +266,9 @@ int main(int argc, char const *argv[]){
 
 		// Cantidad de personas para visita
 		int cantPer = (rand() % 3) + 1;		// 1 a 3
+		if(cantPer < conteoPersonas){
+			cantPer = conteoPersonas;
+		}
 		os << " " << cantPer;
 		os << endl;
 	}

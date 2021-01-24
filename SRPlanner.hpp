@@ -19,12 +19,6 @@
 
 using namespace std;
 
-time_t obtenerTime(string ts);
-
-string stringTime(time_t t);
-
-time_t sumaMinutos(time_t t, int m);
-
 struct Cuarteta{
 	string idbh;	// id de Bloque Horario
 	string idp;		// id de Persona
@@ -32,10 +26,17 @@ struct Cuarteta{
 	string idvi;	// id de la Visita (Sólo cuando la persona hace una visita)
 };
 
+struct Tripleta{
+	string idPersona;
+	string idVisita;
+	time_t tInicioVisita;
+};
+
 
 class InstanceSolution{
 	public:
 		vector<Cuarteta> instance;	// vector para persona, horario, vehículo o visita.
+		InstanceInput* punteroII;
 
 		InstanceSolution(InstanceInput* ii);
 		~InstanceSolution();
@@ -47,8 +48,8 @@ class InstanceSolution{
 		void SortByPersona();
 		void SortByBloque();
 
-		vector<pair<string,string>> MinCostFlow(InstanceInput* ii);
-		static bool comparadorParPersVis(pair<string,string> a, pair<string,string> b);
+		vector<Tripleta> MinCostFlow(InstanceInput* ii);
+		static bool sortTripletaPorTiempoInicio(Tripleta a, Tripleta b);
 		vector<Cuarteta> solucionarJornada(vector<pair<int,int>> pervis);
 };
 

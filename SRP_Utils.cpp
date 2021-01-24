@@ -19,6 +19,7 @@ string stringTime(time_t t){
 	return aux.substr(0,aux.length()-1);
 }
 
+
 time_t sumaMinutos(time_t t, int m){
 	struct tm tm = *localtime(&t);
 	tm.tm_min += m;

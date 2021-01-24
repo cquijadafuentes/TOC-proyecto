@@ -26,6 +26,7 @@ Solver::~Solver(){
 	if(ii != NULL){
 		delete ii;
 	}
+	
 	if(is_actual != NULL){
 		delete is_actual;
 	}
@@ -44,31 +45,42 @@ void Solver::SolucionPorBusquedaLocal(string outputFileName){
 
 
 
-
-
-
-
-
 //	*************************************************************
 //	****************** CLASE INSTANCE SOLUTION ******************
 //	*************************************************************
 
 
 InstanceSolution::InstanceSolution(InstanceInput* ii){
+	punteroII = ii;
 	cout << "Creando InstanceSolution" << endl;
 	// Generar asignación inicial personas-visitas
-	vector <pair<string,string>> insIn = MinCostFlow(ii);
+	vector <Tripleta> insIn = MinCostFlow(ii);
 	cout << "Visitas a ralizar idPersona -> idVisita: " << endl;
 	for(int i=0; i<insIn.size(); i++){
-		cout << insIn[i].first << " -> " << insIn[i].second << endl;
+		cout << insIn[i].idPersona << " -> " << insIn[i].idVisita << " - Inicia en: " << stringTime(insIn[i].tInicioVisita) << endl;
 	}
 
 	// Generar asignación con bloques horarios y vehículos
 	// Identificar jornadas y seleccionar los pares a la jornada
+	time_t t_inicio, t_fin;
+	int intIdBloque = 0;
+	while(intIdBloque < ii->l){
+		t_inicio = ii->bloque_timestamp[intIdBloque];
+		t_fin = sumaMinutos(t_inicio,ii->z);
+		intIdBloque++;
+		while(intIdBloque < ii->l && ii->bloque_timestamp[intIdBloque] == t_fin){
+			t_fin = sumaMinutos(t_inicio,ii->z);
+			intIdBloque++;
+		}
+		// <--- Hasta aquí se ha identificado un bloque [t_inicio,t_fin]
+		// Cualquier visita no realizada que tenga tiempo_inicio < t_fin entra en la ventana
+
+
+	}
 
 	vector<bool> visitasAsignadas = vector<bool>(false);
 	// 1° Ordenar el vector por el tiempo de la visita
-	sort(insIn.begin(), insIn.end(), comparadorParPersVis);
+	sort(insIn.begin(), insIn.end(), sortTripletaPorTiempoInicio);
 	// 2° Identificar las jornadas
 	//		2°a) por cada jornada, crear est con las visitas correspondientes.
 	//		2°b) Invocar la estructura y las asignaciones no usadas devolveras a insIn
@@ -112,7 +124,7 @@ void InstanceSolution::SortByBloque(){
 	
 }
 
-vector<pair<string,string>> InstanceSolution::MinCostFlow(InstanceInput* ii){
+vector<Tripleta> InstanceSolution::MinCostFlow(InstanceInput* ii){
 
 	cout << "MinCostFlow datos:" << endl;
 	int cvertices = ii->n + ii->l + 2; 	// Personas + visitas + source + sink
@@ -202,15 +214,24 @@ vector<pair<string,string>> InstanceSolution::MinCostFlow(InstanceInput* ii){
 	}
 	operations_research::FlowQuantity total_flow_cost = min_cost_flow.GetOptimalCost();
 	
-	vector<pair<string,string>> relPV;	// Relaciones Persona-Visita
+	vector<Tripleta> relPV;	// Relaciones Persona-Visita
 	for (int i = 0; i < caristas; ++i) {
 		if(graph.Tail(i) > 0 && graph.Tail(i) <= ii->n && min_cost_flow.Flow(i) > 0){	// Sólo personas a visitas:
+			Tripleta aux;
 			int posPer = graph.Tail(i) - 1;
 			int posVis = graph.Head(i) - (ii->n+1);
-			relPV.push_back(make_pair(ii->pers_id[posPer],ii->visita_id[posVis]));
+			aux.idPersona = ii->pers_id[posPer];
+			aux.idVisita = ii->visita_id[posVis];
+			aux.tInicioVisita = ii->getInicioVentanaVisita(aux.idVisita);
+			relPV.push_back(aux);
 		}
 	}
 	return relPV;
+}
+
+
+bool InstanceSolution::sortTripletaPorTiempoInicio(Tripleta a, Tripleta b){
+	return a.tInicioVisita < b.tInicioVisita;
 }
 
 
@@ -221,8 +242,3 @@ vector<Cuarteta> InstanceSolution::solucionarJornada(vector<pair<int,int>> pervi
 	return vector<Cuarteta>();
 }
 
-
-bool InstanceSolution::comparadorParPersVis(pair<string,string> a, pair<string,string> b){
-	// ToDo
-	return false;
-}
