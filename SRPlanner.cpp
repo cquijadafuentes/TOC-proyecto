@@ -10,6 +10,11 @@ namespace operations_research {
 }
 
 
+void printCuarteta(Cuarteta x){
+	cout << "bh_" << x.posbh << "\tper_" << x.posp << "\tposvi" << x.posvi << "\tposve" << x.posve;
+}
+
+
 //	**********************************************************
 //	***************** CLASE INSTANCE SOLUTION ****************
 //	**********************************************************
@@ -62,25 +67,41 @@ InstanceSolution::InstanceSolution(InstanceInput* ii){
 	// 1° Ordenar el vector por el bloque de inicio de la visita
 	sort(insIn.begin(), insIn.end(), sortTripletaPorTiempoInicio);
 	// Generar estructra para marcar visitas asignadas
-	vector<bool> visitasAsignadas = vector<bool>(false);
+	vector<bool> visitasAsignadas = vector<bool>(ii->l, false);
 	// Identificar jornadas y seleccionar los pares a la jornada
-	time_t t_inicio, t_fin;
 	int intIdBloque = 0;
-	while(intIdBloque < ii->l){
-		t_inicio = ii->bloque_timestamp[intIdBloque];
-		t_fin = sumaMinutos(t_inicio,ii->z);
-		intIdBloque++;
-		while(intIdBloque < ii->l && ii->bloque_timestamp[intIdBloque] == t_fin){
-			t_fin = sumaMinutos(t_inicio,ii->z);
+	time_t t_fin;
+	cout << "Identificando bloques..." << endl;
+	while(intIdBloque < ii->h){
+		t_fin = sumaMinutos(ii->bloque_timestamp[intIdBloque],ii->z);
+		while(intIdBloque < ii->h-1 && ii->bloqueContiguoConSiguiente(intIdBloque)){
+			t_fin = sumaMinutos(t_fin,ii->z);
 			intIdBloque++;
 		}
+		intIdBloque++;
 		// <--- Hasta aquí se ha identificado un bloque [t_inicio,t_fin]
 		// Cualquier visita no realizada que tenga tiempo_inicio < t_fin entra en la ventana
-
-
+		cout << "Bloque " << stringTime(t_fin) << endl;
+		vector<Cuarteta> visitasEnJornada;
+		int i=0;
+		while(i < insIn.size() && insIn[i].tInicioVisita < t_fin){
+			if(!visitasAsignadas[insIn[i].posVisita]){
+				Cuarteta xx;
+				xx.posp = insIn[i].posPersona;
+				xx.posvi = insIn[i].posVisita;
+				xx.posbh = -1;
+				xx.posve = -1;
+				visitasEnJornada.push_back(xx);
+			}
+			i++;
+		}
+		cout << "Visitas en evaluación antes de " << stringTime(t_fin) << endl;
+		for(int i=0; i<visitasEnJornada.size(); i++){
+			printCuarteta(visitasEnJornada[i]);
+			cout << endl;
+		}
 	}
 
-	
 	// 2° Identificar las jornadas
 	//		2°a) por cada jornada, crear est con las visitas correspondientes.
 	//		2°b) Invocar la estructura y las asignaciones no usadas devolveras a insIn

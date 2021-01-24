@@ -344,6 +344,12 @@ time_t InstanceInput::getInicioVentanaVisita(string idVisita){
 }
 
 
+time_t InstanceInput::getInicioVentanaVisita(int posVisita){
+	int posBloque = mapa_bloquesh[visita_bloque_inicio[posVisita]];
+	return bloque_timestamp[posBloque];
+}
+
+
 time_t InstanceInput::getFinVetanaVisita(string idVisita){
 	// Encontrar la id del blque en que termina la ventanan de la visita
 	unordered_map<string,int>::const_iterator ipos = mapa_visitas.find(idVisita);
@@ -390,3 +396,12 @@ bool InstanceInput::personaPuedeVisitar(int posPersona, int posVisita){
 	}
 	return true;
 }
+
+
+bool InstanceInput::bloqueContiguoConSiguiente(int posBl){
+	if(posBl < 0 || posBl >= bloque_timestamp.size()-1){
+		return false;
+	}
+	return sumaMinutos(bloque_timestamp[posBl],z) == bloque_timestamp[posBl+1];
+}
+

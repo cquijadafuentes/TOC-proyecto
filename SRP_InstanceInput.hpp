@@ -74,9 +74,11 @@ class InstanceInput{
 		int getPrioridadVisita(string idVisita);
 		int getTiempoEstimadoVisita(string idVisita);
 		time_t getInicioVentanaVisita(string idVisita);
+		time_t getInicioVentanaVisita(int posVisita);
 		time_t getFinVetanaVisita(string idVisita);
 
 		bool personaPuedeVisitar(int posPersona, int posVisita);
+		bool bloqueContiguoConSiguiente(int posBl);
 
 
 	private:

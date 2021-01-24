@@ -20,10 +20,10 @@
 using namespace std;
 
 struct Cuarteta{
-	string idbh;	// id de Bloque Horario
-	string idp;		// id de Persona
-	string idve;	// id del Vehículo (Sólo en caso que sea un traslado)
-	string idvi;	// id de la Visita (Sólo cuando la persona hace una visita)
+	int posbh;	// pos de Bloque Horario
+	int posp;	// pos de Persona
+	int posve;	// pos del Vehículo (Sólo en caso que sea un traslado)
+	int posvi;	// pos de la Visita (Sólo cuando la persona hace una visita)
 };
 
 struct Tripleta{
@@ -32,10 +32,12 @@ struct Tripleta{
 	time_t tInicioVisita;
 };
 
+void stringCuarteta(Cuarteta x);
 
 class InstanceSolution{
 	public:
 		vector<Cuarteta> instance;	// vector para persona, horario, vehículo o visita.
+
 		InstanceInput* punteroII;
 
 		InstanceSolution(InstanceInput* ii);
