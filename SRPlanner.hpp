@@ -20,10 +20,10 @@ string stringTime(time_t t);
 time_t sumaMinutos(time_t t, int m);
 
 struct Cuarteta{
-	string idbh;
-	string idp;
-	string idve;
-	string idvi;
+	string idbh;	// id de Bloque Horario
+	string idp;		// id de Persona
+	string idve;	// id del Vehículo (Sólo en caso que sea un traslado)
+	string idvi;	// id de la Visita (Sólo cuando la persona hace una visita)
 };
 
 
@@ -38,6 +38,8 @@ class InstanceSolution{
 		double evaluarInstancia();
 
 		InstanceSolution* generarVecinos();
+		void SortByPersona();
+		void SortByBloque();
 };
 
 
