@@ -94,6 +94,7 @@ class InstanceInput{
 
 		vector<pair<string,string>> MinCostFlow();
 		InstanceSolution instanciaInicial();
+		bool comparadorParPersVis(pair<int,int> a, pair<int,int> b);
 
 		int getMaxVisitasDePersona(string idPersona);
 		MiniBitmap* getBloquesDispDePersona(string idPersona);
@@ -117,6 +118,7 @@ class InstanceInput{
 
 
 	private:
+		vector<Cuarteta> solucionarJornada(vector<pair<int,int>> pervis);
 };
 
 class Traslado{

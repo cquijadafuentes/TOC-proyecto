@@ -1,11 +1,11 @@
 #include "SRPlanner.hpp"
 
 namespace operations_research {
-struct Arc {
-  std::pair<NodeIndex, NodeIndex> nodes;
-  FlowQuantity capacity;
-  FlowQuantity unit_cost;
-};
+	struct Arc {
+		std::pair<NodeIndex, NodeIndex> nodes;
+		FlowQuantity capacity;
+		FlowQuantity unit_cost;
+	};
 }
 
 time_t obtenerTime(string ts){
@@ -26,6 +26,7 @@ string stringTime(time_t t){
 	string aux = ctime(&t);
 	return aux.substr(0,aux.length()-1);
 }
+
 
 time_t sumaMinutos(time_t t, int m){
 	struct tm tm = *localtime(&t);
@@ -354,18 +355,35 @@ vector<pair<string,string>> InstanceInput::MinCostFlow(){
 }
 
 
+vector<Cuarteta> InstanceInput::solucionarJornada(vector<pair<int,int>> pervis){
+	// Evaluar el conjunto de pares que corresponde a una jornada
+	// Se asume que todos los pares enviados corresponden a una jornada
+
+	return vector<Cuarteta>();
+}
+
 
 InstanceSolution InstanceInput::instanciaInicial(){
 	// Generar asignación inicial personas-visitas
 	vector <pair<string,string>> insIn = MinCostFlow();
 
-	// Generar asignación con bloques horarios
+	// Generar asignación con bloques horarios y vehículos
+	// Identificar jornadas y seleccionar los pares a la jornada
+	InstanceSolution solGreedy;
+	vector<bool> visitasAsignadas = vector<bool>(false);
+	// 1° Ordenar el vector por el tiempo de la visita
+	sort(trinsIn.begin(), insIn.end(), comparadorParPersVis);
+	// 2° Identificar las jornadas
+	//		2°a) por cada jornada, crear est con las visitas correspondientes.
+	//		2°b) Invocar la estructura y las asignaciones no usadas devolveras a insIn
+
+	return solGreedy;
+}
 
 
-	// Generar asignación con vehículos
-
-
-	return InstanceSolution();
+bool InstanceInput::comparadorParPersVis(pair<int,int> a, pair<int,int> b){
+	// ToDo
+	return;
 }
 
 
