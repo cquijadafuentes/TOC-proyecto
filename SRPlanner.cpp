@@ -735,3 +735,12 @@ InstanceSolution* InstanceSolution::generarVecinos(){
 	return NULL;
 }
 
+
+void InstanceSolution::SortByPersona(){
+
+}
+
+
+void InstanceSolution::SortByBloque(){
+	
+}
