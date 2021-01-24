@@ -27,8 +27,8 @@ struct Cuarteta{
 };
 
 struct Tripleta{
-	string idPersona;
-	string idVisita;
+	int idPersona;
+	int idVisita;
 	time_t tInicioVisita;
 };
 

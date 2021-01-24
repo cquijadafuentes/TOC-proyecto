@@ -220,9 +220,9 @@ vector<Tripleta> InstanceSolution::MinCostFlow(InstanceInput* ii){
 			Tripleta aux;
 			int posPer = graph.Tail(i) - 1;
 			int posVis = graph.Head(i) - (ii->n+1);
-			aux.idPersona = ii->pers_id[posPer];
-			aux.idVisita = ii->visita_id[posVis];
-			aux.tInicioVisita = ii->getInicioVentanaVisita(aux.idVisita);
+			aux.idPersona = posPer;
+			aux.idVisita = posVis;
+			aux.tInicioVisita = ii->getInicioVentanaVisita(ii->visita_id[posVis]);
 			relPV.push_back(aux);
 		}
 	}
