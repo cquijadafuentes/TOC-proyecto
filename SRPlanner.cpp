@@ -57,10 +57,12 @@ InstanceSolution::InstanceSolution(InstanceInput* ii){
 	vector <Tripleta> insIn = MinCostFlow(ii);
 	cout << "Visitas a ralizar idPersona -> idVisita: " << endl;
 	for(int i=0; i<insIn.size(); i++){
-		cout << insIn[i].idPersona << " -> " << insIn[i].idVisita << " - Inicia en: " << stringTime(insIn[i].tInicioVisita) << endl;
+		cout << insIn[i].posPersona << " -> " << insIn[i].posVisita << " - Inicia en: " << stringTime(insIn[i].tInicioVisita) << endl;
 	}
-
-	// Generar asignación con bloques horarios y vehículos
+	// 1° Ordenar el vector por el bloque de inicio de la visita
+	sort(insIn.begin(), insIn.end(), sortTripletaPorTiempoInicio);
+	// Generar estructra para marcar visitas asignadas
+	vector<bool> visitasAsignadas = vector<bool>(false);
 	// Identificar jornadas y seleccionar los pares a la jornada
 	time_t t_inicio, t_fin;
 	int intIdBloque = 0;
@@ -78,9 +80,7 @@ InstanceSolution::InstanceSolution(InstanceInput* ii){
 
 	}
 
-	vector<bool> visitasAsignadas = vector<bool>(false);
-	// 1° Ordenar el vector por el tiempo de la visita
-	sort(insIn.begin(), insIn.end(), sortTripletaPorTiempoInicio);
+	
 	// 2° Identificar las jornadas
 	//		2°a) por cada jornada, crear est con las visitas correspondientes.
 	//		2°b) Invocar la estructura y las asignaciones no usadas devolveras a insIn
@@ -220,8 +220,8 @@ vector<Tripleta> InstanceSolution::MinCostFlow(InstanceInput* ii){
 			Tripleta aux;
 			int posPer = graph.Tail(i) - 1;
 			int posVis = graph.Head(i) - (ii->n+1);
-			aux.idPersona = posPer;
-			aux.idVisita = posVis;
+			aux.posPersona = posPer;
+			aux.posVisita = posVis;
 			aux.tInicioVisita = ii->getInicioVentanaVisita(ii->visita_id[posVis]);
 			relPV.push_back(aux);
 		}
@@ -231,7 +231,13 @@ vector<Tripleta> InstanceSolution::MinCostFlow(InstanceInput* ii){
 
 
 bool InstanceSolution::sortTripletaPorTiempoInicio(Tripleta a, Tripleta b){
-	return a.tInicioVisita < b.tInicioVisita;
+	if(a.tInicioVisita != b.tInicioVisita){
+		return a.tInicioVisita < b.tInicioVisita;
+	}
+	if(a.posVisita != b.posVisita){
+		return a.posVisita < b.posVisita;
+	}
+	return a.posPersona < b.posPersona;
 }
 
 
