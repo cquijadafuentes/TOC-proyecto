@@ -1,10 +1,10 @@
 CPP=g++
 
-OBJETOS=MiniBitmap.o
+OBJETOS=MiniBitmap.o SRP_Utils.o SRP_InstanceOutput.o SRP_InstanceInput.o
 
 BINS=test_minibitmap test_minibitmap_subc generate_input\
 		SRPlanner_test SRPlanner_checker \
-		SRPlanner_mincostf SRPlanner_solucionar
+		SRPlanner_solucionar
 
 SRP=SRPlanner
 

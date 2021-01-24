@@ -17,7 +17,7 @@ MiniBitmap::MiniBitmap(int n){
 
 MiniBitmap::~MiniBitmap(){
 	if(cap > 0 && bitmap != NULL){
-		delete(bitmap);
+		delete bitmap;
 	}
 }
 
