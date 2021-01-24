@@ -1,4 +1,4 @@
-#include MINIBITMAP
+#ifndef MINIBITMAP
 #define MINIBITMAP
 
 #include <iostream>
