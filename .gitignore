@@ -2,6 +2,8 @@
 
 *.exe
 
+vgcore.*
+
 test_minibitmap
 test_minibitmap_subc
 generate_input
