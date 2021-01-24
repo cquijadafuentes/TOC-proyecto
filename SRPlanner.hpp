@@ -41,6 +41,9 @@ class InstanceSolution{
 		double evaluarInstancia();
 
 		InstanceSolution* generarVecinos();
+		void SortByPersona();
+		void SortByBloque();
+
 };
 
 
