@@ -49,5 +49,5 @@ SRPlanner_solucionar:
 	$(CPP) $(ORTOOLSFLAGS) -o ./SRPlanner_solucionar SRPlanner_solucionar.cpp $(OBJETOS) SRPlanner.o
 
 clean:
-	rm -f $(OBJETOS) $(BINS)
+	rm -f $(OBJETOS) $(BINS) SRPlanner.o
 	cd .; rm -f *.a $(BINS)
