@@ -13,3 +13,4 @@ Usar:
 https://developers.google.com/optimization
 
 
+La asignación puede poner las visitas más urgentes en el bloque menos conflictivo.

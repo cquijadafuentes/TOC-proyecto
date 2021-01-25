@@ -381,6 +381,7 @@ bool InstanceSolution::sortTripletaPorTiempoInicio(Tripleta a, Tripleta b){
 	return a.posPersona < b.posPersona;
 }
 
+
 bool InstanceSolution::checker(){
 	// Verificar restriccioes duras de la instancia
 	// - Una persona no está en dos sitios al mismo tiempo
