@@ -88,28 +88,17 @@ void MiniBitmap::printBitmap(){
 }
 
 
-// Veradero si THIS es subconjunto de subConj
+// Veradero si THIS es subconjunto de supConj
 bool MiniBitmap::esSubconjunto(MiniBitmap* supConj){
 	// Si es nulo el parámetro o si tienen diferente capacidad
-	if(supConj == NULL || cap != supConj->cap){
+	if(supConj == nullptr || cap != supConj->cap){
 		return false;
 	}
-	int mascara, opA, opSC;
+	// Se opera con AND los bits de cada entero
+	// Si THIS es sub de supConj, THIS intersectado supConj = THIS
 	for(int i=0; i<ints; i++){
-		// Si el supConj no tiene elementos en 1 en ese entero, no es subconjunto
-		if(bitmap[i] != 0 && supConj == 0){
+		if(supConj->bitmap[i]&bitmap[i] != bitmap[i]){
 			return false;
-		}else{
-			mascara = 1;
-			for(int j=0; j<bits_int; j++){
-				// Esta operación debería dar 0 o un número
-				opA = bitmap[i] & mascara;
-				opSC = supConj->bitmap[i] & mascara;
-				if(opA > opSC){
-					return false;
-				}
-				mascara = mascara << 1;
-			}
 		}
 	}
 	return true;
