@@ -37,7 +37,7 @@ class InstanceInput{
 		vector<int> vehi_cost;
 
 		vector<string> ubica_id;
-		vector<vector<pair<double,int>>> ubica_dist_mins;
+		vector<vector<pair<float,int>>> ubica_dist_mins;
 
 		vector<string> bloque_id;
 		vector<time_t> bloque_timestamp;

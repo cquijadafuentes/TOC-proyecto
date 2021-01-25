@@ -55,6 +55,7 @@ void Solver::SolucionPorBusquedaLocal(string outputFileName){
 
 InstanceSolution::InstanceSolution(InstanceInput* ii){
 	punteroII = ii;
+	costo = 0.0;
 	cout << "Creando InstanceSolution" << endl;
 	// Generar asignación inicial personas-visitas
 	vector <Tripleta> insIn = MinCostFlow(ii);
@@ -110,6 +111,7 @@ InstanceSolution::InstanceSolution(InstanceInput* ii){
 			int posUbicaOrigen = 0;	// Siempre se comienza desde el serviu
 			int posUbicaDestino = ii->mapa_ubicaciones[ii->visita_ubicacion[pvisitalocal]];
 			int minutosTraslado = ii->ubica_dist_mins[posUbicaOrigen][posUbicaDestino].second;
+			float distanciaTraslado = ii->ubica_dist_mins[posUbicaOrigen][posUbicaDestino].first;
 			int bloquesTraslado = minutosTraslado / ii->z;
 			if(bloquesTraslado * ii->z < minutosTraslado){
 				bloquesTraslado++;
@@ -142,6 +144,7 @@ InstanceSolution::InstanceSolution(InstanceInput* ii){
 						cout << "Evaluando Vehículo " << idVe << " para visita " << pvisitalocal << endl;
 						if(usoVehiculos[idVe]->count(countBloqueInicio, countBloqueFin) == 0){
 							// El vehículo está disponible y se puede asignar el viaje
+							costo += (distanciaTraslado * ii->vehi_cost[idVe]) * 2;
 							for(int ij = 0; ij < bloquesTotal; ij++){
 								usoVehiculos[idVe]->setBit(ij+countBloqueInicio);
 								for(int kk = 0; kk < cantPerDisponibles; kk++){
@@ -189,7 +192,7 @@ InstanceSolution::InstanceSolution(InstanceInput* ii){
 	}
 	printInstanceSolution();
 	cout << "Conteo final de visitas asignadas: " << cva << "/" << visitasAsignadas.size() << endl;
-
+	cout << "Costo de la asignación: " << costo << endl;
 	// Checkear la solución inicial (si es válida)
 	isValid = checker();
 
@@ -230,8 +233,17 @@ bool InstanceSolution::validarInstancia(){
 }
 
 
-double InstanceSolution::evaluarInstancia(){
+float InstanceSolution::evaluarInstancia(){
 	cout << "evaluarInstancia" << endl;
+	// Calcular costo de la solución
+	//
+	costo = 0.0;
+	for(int i=0; i<instance.size(); i++){
+		// 
+
+	}
+
+	// Calcular calidad de la solución
 
 	return 0.0;
 }
@@ -367,14 +379,6 @@ bool InstanceSolution::sortTripletaPorTiempoInicio(Tripleta a, Tripleta b){
 		return a.posVisita < b.posVisita;
 	}
 	return a.posPersona < b.posPersona;
-}
-
-
-vector<Cuarteta> InstanceSolution::solucionarJornada(vector<pair<int,int>> pervis){
-	// Evaluar el conjunto de pares que corresponde a una jornada
-	// Se asume que todos los pares enviados corresponden a una jornada
-
-	return vector<Cuarteta>();
 }
 
 bool InstanceSolution::checker(){

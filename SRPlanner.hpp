@@ -38,7 +38,8 @@ class InstanceSolution{
 	public:
 		vector<Cuarteta> instance;	// vector para persona, horario, vehículo o visita.
 		bool isValid;				// resultado del checker
-		double evaluacion;			//
+		double evaluacion;			// factor de calidad de la instancia
+		float costo;				// costo de la solución (traslado de vehículos)
 
 		InstanceInput* punteroII;
 		vector<MiniBitmap*> usoVehiculos;
@@ -48,7 +49,7 @@ class InstanceSolution{
 		~InstanceSolution();
 
 		bool validarInstancia();
-		double evaluarInstancia();
+		float evaluarInstancia();
 
 		InstanceSolution* generarVecinos();
 		void SortByPersona();
@@ -56,8 +57,7 @@ class InstanceSolution{
 
 		vector<Tripleta> MinCostFlow(InstanceInput* ii);
 		static bool sortTripletaPorTiempoInicio(Tripleta a, Tripleta b);
-		vector<Cuarteta> solucionarJornada(vector<pair<int,int>> pervis);
-
+		
 		bool checker();
 		double evaluator();
 

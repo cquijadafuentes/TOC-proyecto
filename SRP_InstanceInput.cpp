@@ -90,7 +90,7 @@ InstanceInput::InstanceInput(string filename){
 	// Lectura de k líneas con las distancias entre ubicaciones
 	// Nota: primera ubicación siempre es SERVIU
 	ubica_id = vector<string>(k);
-	ubica_dist_mins = vector<vector<pair<double,int>>>(k,vector<pair<double,int>>(k));
+	ubica_dist_mins = vector<vector<pair<float,int>>>(k,vector<pair<float,int>>(k));
 	for(int i=0; i < k; i++){
 		// Cada línea cotiene:
 		// id_ubicacion k pares distancia,tiempo
@@ -99,7 +99,7 @@ InstanceInput::InstanceInput(string filename){
 		iss >> ubica_id[i];
 		cout << ubica_id[i] << " ";
 		// Procesando pares distancia,tiempo
-		double auxdist;
+		float auxdist;
 		int auxtime;
 		for(int j=0; j<k; j++){
 			iss >> auxdist >> auxtime;
