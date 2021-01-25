@@ -44,6 +44,7 @@ class InstanceSolution{
 		vector<MiniBitmap*> usoVehiculos;
 
 		InstanceSolution(InstanceInput* ii);
+		InstanceSolution(InstanceInput* ii, InstanceOutput* io);
 		~InstanceSolution();
 
 		bool validarInstancia();

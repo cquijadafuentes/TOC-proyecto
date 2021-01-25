@@ -198,6 +198,20 @@ InstanceSolution::InstanceSolution(InstanceInput* ii){
 }
 
 
+InstanceSolution::InstanceSolution(InstanceInput* ii, InstanceOutput* io){
+	// Generar solución desde un InstanceInput y un InstanceOutput
+	// Para verificar una solución en base a los ficheros de entrada y salida
+
+	cout << "Conteo final de visitas asignadas: " << cva << "/" << visitasAsignadas.size() << endl;
+
+	// Checkear la solución inicial (si es válida)
+	isValid = checker();
+
+	// Evaluar la solución inicial
+	evaluacion = evaluator();
+}
+
+
 InstanceSolution::~InstanceSolution(){
 	cout << "Borrando InstanceSolution" << endl;
 	
