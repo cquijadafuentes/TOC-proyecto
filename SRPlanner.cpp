@@ -23,7 +23,6 @@ Solver::Solver(string filename){
 	ii = new InstanceInput(filename);
 	// Generar solución inicial
 	is_actual = new InstanceSolution(ii);
-
 }
 
 
@@ -49,7 +48,6 @@ void Solver::SolucionPorBusquedaLocal(string outputFileName){
 
 
 
-
 //	*************************************************************
 //	****************** CLASE INSTANCE SOLUTION ******************
 //	*************************************************************
@@ -66,52 +64,143 @@ InstanceSolution::InstanceSolution(InstanceInput* ii){
 	}
 	// 1° Ordenar el vector por el bloque de inicio de la visita
 	sort(insIn.begin(), insIn.end(), sortTripletaPorTiempoInicio);
-	// Generar estructra para marcar visitas asignadas
+	// Generar estructura para marcar visitas asignadas
 	vector<bool> visitasAsignadas = vector<bool>(ii->l, false);
+	// Iniciar estructura para marcar el uso de los vehículos
+	usoVehiculos = vector<MiniBitmap*>(ii->m);
+	for(int i=0; i<ii->m; i++){
+		usoVehiculos[i] = new MiniBitmap(ii->h);
+	}
 	// Identificar jornadas y seleccionar los pares a la jornada
-	int intIdBloque = 0;
-	time_t t_fin;
-	cout << "Identificando bloques..." << endl;
-	while(intIdBloque < ii->h){
-		t_fin = sumaMinutos(ii->bloque_timestamp[intIdBloque],ii->z);
-		while(intIdBloque < ii->h-1 && ii->bloqueContiguoConSiguiente(intIdBloque)){
-			t_fin = sumaMinutos(t_fin,ii->z);
-			intIdBloque++;
+	int jor_pos_fin, jor_pos_inicio;
+	time_t t_jorn_fin, t_jorn_inicio;
+	cout << "Identificando jornadas..." << endl;
+	jor_pos_fin = 0;
+	while(jor_pos_fin < ii->h){
+		t_jorn_inicio = ii->bloque_timestamp[jor_pos_fin];
+		jor_pos_inicio = jor_pos_fin;
+		t_jorn_fin = sumaMinutos(ii->bloque_timestamp[jor_pos_fin],ii->z);
+		while(jor_pos_fin < ii->h-1 && ii->bloqueContiguoConSiguiente(jor_pos_fin)){
+			t_jorn_fin = sumaMinutos(t_jorn_fin,ii->z);
+			jor_pos_fin++;
 		}
-		intIdBloque++;
-		// <--- Hasta aquí se ha identificado un bloque [t_inicio,t_fin]
-		// Cualquier visita no realizada que tenga tiempo_inicio < t_fin entra en la ventana
-		cout << "Bloque " << stringTime(t_fin) << endl;
-		vector<Cuarteta> visitasEnJornada;
+		jor_pos_fin++;
+		// <--- Hasta aquí se ha identificado un bloque [t_jorn_inicio,t_jorn_fin]
+		// Cualquier visita no realizada que tenga tiempo_inicio < t_jorn_fin entra en la ventana
+		cout << "Jornada desde: " << stringTime(t_jorn_inicio) << " hasta " << stringTime(t_jorn_fin) << endl;
+		vector<Cuarteta> visJornada;
 		int i=0;
-		while(i < insIn.size() && insIn[i].tInicioVisita < t_fin){
+		while(i < insIn.size() && insIn[i].tInicioVisita < t_jorn_fin){
 			if(!visitasAsignadas[insIn[i].posVisita]){
 				Cuarteta xx;
 				xx.posp = insIn[i].posPersona;
 				xx.posvi = insIn[i].posVisita;
 				xx.posbh = -1;
 				xx.posve = -1;
-				visitasEnJornada.push_back(xx);
+				visJornada.push_back(xx);
 			}
 			i++;
 		}
-		cout << "Visitas en evaluación antes de " << stringTime(t_fin) << endl;
-		for(int i=0; i<visitasEnJornada.size(); i++){
-			printCuarteta(visitasEnJornada[i]);
+		cout << "Visitas en evaluación antes de " << stringTime(t_jorn_fin) << endl;
+		for(int i=0; i<visJornada.size(); i++){
+			int pvisitalocal = visJornada[i].posvi;
+			printCuarteta(visJornada[i]);
 			cout << endl;
+			// Identificar si hay bloques suficientes en la jornada para la visita desde serviu
+			int posUbicaOrigen = 0;	// Siempre se comienza desde el serviu
+			int posUbicaDestino = ii->mapa_ubicaciones[ii->visita_ubicacion[pvisitalocal]];
+			int minutosTraslado = ii->ubica_dist_mins[posUbicaOrigen][posUbicaDestino].second;
+			int bloquesTraslado = minutosTraslado / ii->z;
+			if(bloquesTraslado * ii->z < minutosTraslado){
+				bloquesTraslado++;
+			}
+			int bloquesVisita = ii->visita_testimado_bloques[pvisitalocal];
+			int bloquesTotal = bloquesVisita + (2 * bloquesTraslado);
+//			cout << "Visita " << ii->visita_id[pvisitalocal] << " toma " << bloquesTraslado << " bloques en traslado";
+//			cout << " y " << bloquesVisita << " bloques en la visita." << endl;
+//			cout << "\tTotal: " << bloquesTotal << " bloques en traslado" <<  endl;
+			// Calcular tiempo de inicio de la visita
+			int deltaBloques = 0;
+			time_t t_iniciaVisita = t_jorn_inicio;
+			while(!visitasAsignadas[pvisitalocal] && sumaMinutos(t_iniciaVisita, (bloquesTotal+deltaBloques)*ii->z) <= t_jorn_fin){
+				// La visita no ha sido asignada y 
+				// El tiempo de traslado + visita es mejor que la jornada
+				// Revisar si las personas de la visita pueden en el bloque
+				int cantPerDisponibles = 0;
+				int countBloqueInicio = jor_pos_inicio + deltaBloques;
+				int countBloqueFin = countBloqueInicio + bloquesTotal - 1;
+				for(int ij = 0; ij < ii->visita_cant_personas[pvisitalocal]; ij++){
+					if(ii->pers_horasdisp[visJornada[i+ij].posp]->count(countBloqueInicio, countBloqueFin) == bloquesTotal){
+						cantPerDisponibles++;
+					}
+				}
+				if(cantPerDisponibles == ii->visita_cant_personas[pvisitalocal]){
+					// Todas las personas tienen horario disponible
+					// Buscar un vehículo para el traslado
+					int idVe = 0;
+					while(idVe < ii->m && !visitasAsignadas[pvisitalocal] && ii->visita_vehiculos[pvisitalocal]->access(idVe) == 1){
+						cout << "Evaluando Vehículo " << idVe << " para visita " << pvisitalocal << endl;
+						if(usoVehiculos[idVe]->count(countBloqueInicio, countBloqueFin) == 0){
+							// El vehículo está disponible y se puede asignar el viaje
+							for(int ij = 0; ij < bloquesTotal; ij++){
+								usoVehiculos[idVe]->setBit(ij+countBloqueInicio);
+								for(int kk = 0; kk < cantPerDisponibles; kk++){
+									Cuarteta xx;
+									xx.posp = insIn[i].posPersona;
+									xx.posbh = jor_pos_inicio + ij;
+									xx.posvi = -1;
+									xx.posve = -1;
+									// Asignar según el bloque:
+									if(ij < bloquesTraslado){
+										// Si el traslado de ida
+										xx.posve = idVe;
+									}else if(ij < bloquesVisita+bloquesTraslado){
+										// Si es la visita
+										xx.posvi = pvisitalocal;
+									}else{
+										// Si es el traslado de vuelta
+										xx.posve = idVe;
+									}
+									instance.push_back(xx);
+								}
+							}
+							// Marcar Visita como asignada
+							visitasAsignadas[pvisitalocal] = true;
+							// Actualizar i en función de las personas que deben hacer la visita
+							i += (cantPerDisponibles - 1);
+							cout << "Visita asignada exitosamente" << endl;
+						}
+						idVe++;
+					}
+				}
+
+				// Revisar si hay vehículo dispnible en el bloque
+
+				// Si es posible hacer la visita, registrar resultado en instance.
+				deltaBloques++;
+			}
 		}
 	}
-
-	// 2° Identificar las jornadas
-	//		2°a) por cada jornada, crear est con las visitas correspondientes.
-	//		2°b) Invocar la estructura y las asignaciones no usadas devolveras a insIn
-
+	int cva = 0;
+	for(int i=0; i<visitasAsignadas.size(); i++){
+		if(visitasAsignadas[i]){
+			cva++;
+		}
+	}
+	printInstanceSolution();
+	cout << "Conteo final de visitas asignadas: " << cva << "/" << visitasAsignadas.size() << endl;
 }
 
 
 InstanceSolution::~InstanceSolution(){
 	cout << "Borrando InstanceSolution" << endl;
 	
+	// No se elimina el punteroII porque viene de Solver y ahí se elimina
+	for(int i=0; i<punteroII->m; i++){
+		if(usoVehiculos[i] != NULL){
+			delete usoVehiculos[i];
+		}
+	}
 }
 
 
@@ -269,3 +358,12 @@ vector<Cuarteta> InstanceSolution::solucionarJornada(vector<pair<int,int>> pervi
 	return vector<Cuarteta>();
 }
 
+void InstanceSolution::printInstanceSolution(){
+	cout << "bh\tp\tve\tvi" << endl;
+	for(int i=0; i<instance.size(); i++){
+		cout << instance[i].posbh;
+		cout << "\t" << instance[i].posp;
+		cout << "\t" << instance[i].posve;
+		cout << "\t" << instance[i].posvi << endl;
+	}
+}

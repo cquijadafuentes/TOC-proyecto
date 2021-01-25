@@ -39,6 +39,7 @@ class InstanceSolution{
 		vector<Cuarteta> instance;	// vector para persona, horario, vehículo o visita.
 
 		InstanceInput* punteroII;
+		vector<MiniBitmap*> usoVehiculos;
 
 		InstanceSolution(InstanceInput* ii);
 		~InstanceSolution();
@@ -53,6 +54,8 @@ class InstanceSolution{
 		vector<Tripleta> MinCostFlow(InstanceInput* ii);
 		static bool sortTripletaPorTiempoInicio(Tripleta a, Tripleta b);
 		vector<Cuarteta> solucionarJornada(vector<pair<int,int>> pervis);
+
+		void printInstanceSolution();
 };
 
 
