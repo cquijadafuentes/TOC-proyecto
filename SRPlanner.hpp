@@ -37,6 +37,8 @@ void stringCuarteta(Cuarteta x);
 class InstanceSolution{
 	public:
 		vector<Cuarteta> instance;	// vector para persona, horario, vehículo o visita.
+		bool isValid;				// resultado del checker
+		double evaluacion;			//
 
 		InstanceInput* punteroII;
 		vector<MiniBitmap*> usoVehiculos;
@@ -54,6 +56,9 @@ class InstanceSolution{
 		vector<Tripleta> MinCostFlow(InstanceInput* ii);
 		static bool sortTripletaPorTiempoInicio(Tripleta a, Tripleta b);
 		vector<Cuarteta> solucionarJornada(vector<pair<int,int>> pervis);
+
+		bool checker();
+		double evaluator();
 
 		void printInstanceSolution();
 };

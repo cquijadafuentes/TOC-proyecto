@@ -45,6 +45,7 @@ void MiniBitmap::unsetBit(int x){
 	cant--;						// Se incrementa el contador de unos del bitmap
 }
 
+
 int MiniBitmap::access(int x){
 	if(x < 0 || x >= cap){
 		return 0;
@@ -140,3 +141,4 @@ int MiniBitmap::count(int pInicial, int pFinal){
 	}
 	return count;
 }
+

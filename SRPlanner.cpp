@@ -189,6 +189,12 @@ InstanceSolution::InstanceSolution(InstanceInput* ii){
 	}
 	printInstanceSolution();
 	cout << "Conteo final de visitas asignadas: " << cva << "/" << visitasAsignadas.size() << endl;
+
+	// Checkear la solución inicial (si es válida)
+	isValid = checker();
+
+	// Evaluar la solución inicial
+	evaluacion = evaluator();
 }
 
 
@@ -357,6 +363,40 @@ vector<Cuarteta> InstanceSolution::solucionarJornada(vector<pair<int,int>> pervi
 
 	return vector<Cuarteta>();
 }
+
+bool InstanceSolution::checker(){
+	// Verificar restriccioes duras de la instancia
+	// - Una persona no está en dos sitios al mismo tiempo
+	
+
+	// - Un vehículo no está en dos sitios al mismo tiempo
+	
+
+	// - Una persona llega a una visita posterior a un desplazamiento
+	
+
+	// - Una persona se desplaza luego de una visita
+
+
+	// - Todo vehículo sale desde el serviu y vuelve al serviu en una misma jornada (?)
+	
+
+	// - Toda persona sale desde el serviu y vuelve al serviu en una misma jornada (?)
+
+
+	return false;
+}
+
+
+double InstanceSolution::evaluator(){
+	// Considerar para el factor de evlauación: 
+	// - La función objetivo (el costo)
+	// - Los tiempos de espera
+	double ev = 0.0;
+	
+	return ev;
+}
+
 
 void InstanceSolution::printInstanceSolution(){
 	cout << "bh\tp\tve\tvi" << endl;
