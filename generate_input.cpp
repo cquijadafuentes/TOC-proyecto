@@ -265,8 +265,11 @@ int main(int argc, char const *argv[]){
 		os << " " << prioridad;
 
 		// Cantidad de personas para visita
-		int cantPer = (rand() % 3) + 1;		// 1 a 3
-		if(cantPer < conteoPersonas){
+		int cantPer = 1;
+		if((rand() % 100)> 75){
+			cantPer = ((rand() % 100) < 75) ? 2 : 3;
+		}		// 1, 2 o 3 personas
+		if(cantPer > conteoPersonas){
 			cantPer = conteoPersonas;
 		}
 		os << " " << cantPer;
