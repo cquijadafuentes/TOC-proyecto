@@ -53,11 +53,11 @@ class InstanceSolution{
 		float evaluarInstancia();
 
 		InstanceSolution* generarVecinos();
-		void SortByPersona();
-		void SortByBloque();
 
 		vector<Tripleta> MinCostFlow(InstanceInput* ii);
 		static bool sortTripletaPorTiempoInicio(Tripleta a, Tripleta b);
+		static bool sortCuartetaPorBloquePersona(Cuarteta a, Cuarteta b);
+		static bool sortCuartetaPorPersonaBloque(Cuarteta a, Cuarteta b);
 		
 		bool checker();
 		double evaluator();

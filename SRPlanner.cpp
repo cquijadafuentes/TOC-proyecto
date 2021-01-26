@@ -274,16 +274,6 @@ InstanceSolution* InstanceSolution::generarVecinos(){
 	return NULL;
 }
 
-
-void InstanceSolution::SortByPersona(){
-
-}
-
-
-void InstanceSolution::SortByBloque(){
-	
-}
-
 vector<Tripleta> InstanceSolution::MinCostFlow(InstanceInput* ii){
 
 	cout << "MinCostFlow datos:" << endl;
@@ -400,9 +390,33 @@ bool InstanceSolution::sortTripletaPorTiempoInicio(Tripleta a, Tripleta b){
 	return a.posPersona < b.posPersona;
 }
 
+bool InstanceSolution::sortCuartetaPorBloquePersona(Cuarteta a, Cuarteta b){
+	// Ordena el instance por Bloque horario y luego por id de la Persona
+	if(a.posbh != b.posbh){
+		return a.posbh < b.posbh;
+	}
+	return a.posp < b.posp;
+}
+
+bool InstanceSolution::sortCuartetaPorPersonaBloque(Cuarteta a, Cuarteta b){
+	// Ordena el instance por persona y luego por bloque horario.
+	// Por definición una persona no puede tener dos actividades en el mismo horario
+	// por lo que no podría haber dos cuartetas con igual bloque horario && igual persona
+
+	if(a.posp != b.posp){
+		return a.posp < b.posp;
+	}
+	return a.posbh < b.posbh;
+}
+
 
 bool InstanceSolution::checker(){
 	// Verificar restriccioes duras de la instancia
+
+	// Se ordena por persona y luego por bloque, puede resultar más fácil verificar que una persona no esté en dos sitios al mismo tiempo
+	// Si los movimientos de una persona son lógicos (los vehículos lo llevan desde el origen hasta una ubicación)
+	// Y luego un vehículo lo lleva desde su ubicación hasta el destino, se asume que el vehículo también va bien.
+	sort(instance.begin(), instance.end(), sortCuartetaPorPersonaBloque);
 	// - Una persona no está en dos sitios al mismo tiempo
 	
 
