@@ -37,12 +37,13 @@ void stringCuarteta(Cuarteta x);
 class InstanceSolution{
 	public:
 		vector<Cuarteta> instance;	// vector para persona, horario, vehículo o visita.
+		vector<MiniBitmap*> horasUsoVeh;	// Para marcar los bloques en que se usan vehículos (1 vehículo en uso)
+		vector<MiniBitmap*> horasDispPer;	// Para marcar los bloques disponibles de la persona
 		bool isValid;				// resultado del checker
 		double evaluacion;			// factor de calidad de la instancia
 		float costo;				// costo de la solución (traslado de vehículos)
 
 		InstanceInput* punteroII;
-		vector<MiniBitmap*> usoVehiculos;
 
 		InstanceSolution(InstanceInput* ii);
 		InstanceSolution(InstanceInput* ii, InstanceOutput* io);

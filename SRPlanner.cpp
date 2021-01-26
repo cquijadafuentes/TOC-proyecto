@@ -68,19 +68,19 @@ InstanceSolution::InstanceSolution(InstanceInput* ii){
 	// Generar estructura para marcar visitas asignadas
 	vector<bool> visitasAsignadas = vector<bool>(ii->l, false);
 	// Iniciar estructura para marcar el uso de los vehículos
-	usoVehiculos = vector<MiniBitmap*>(ii->m);
+	horasUsoVeh = vector<MiniBitmap*>(ii->m);
 	for(int i=0; i<ii->m; i++){
-		usoVehiculos[i] = new MiniBitmap(ii->h);
+		horasUsoVeh[i] = new MiniBitmap(ii->h);
 	}
 	// Copiar estructura con disponibilidad de las personas
-	vector<MiniBitmap*> horasPersona = vector<MiniBitmap*>(ii->n);
+	horasDispPer = vector<MiniBitmap*>(ii->n);
 	for(int i=0; i<ii->n; i++){
-		horasPersona[i] = ii->pers_horasdisp[i]->copia();
+		horasDispPer[i] = ii->pers_horasdisp[i]->copia();
 		
 		cout << " ---- " << endl;
 		ii->pers_horasdisp[i]->printBitmap();
 		cout << endl;
-		horasPersona[i]->printBitmap();
+		horasDispPer[i]->printBitmap();
 		cout << endl;
 	}
 	// Identificar jornadas y seleccionar los pares a la jornada
@@ -143,7 +143,7 @@ InstanceSolution::InstanceSolution(InstanceInput* ii){
 				int countBloqueInicio = jor_pos_inicio + deltaBloques;
 				int countBloqueFin = countBloqueInicio + bloquesTotal - 1;
 				for(int ij = 0; ij < ii->visita_cant_personas[pvisitalocal]; ij++){
-					if(horasPersona[visJornada[i+ij].posp]->count(countBloqueInicio, countBloqueFin) == bloquesTotal){
+					if(horasDispPer[visJornada[i+ij].posp]->count(countBloqueInicio, countBloqueFin) == bloquesTotal){
 						cantPerDisponibles++;
 					}
 				}
@@ -153,11 +153,11 @@ InstanceSolution::InstanceSolution(InstanceInput* ii){
 					int idVe = 0;
 					while(idVe < ii->m && !visitasAsignadas[pvisitalocal] && ii->visita_vehiculos[pvisitalocal]->access(idVe) == 1){
 						cout << "Evaluando Vehículo " << idVe << " para visita " << pvisitalocal << endl;
-						if(usoVehiculos[idVe]->count(countBloqueInicio, countBloqueFin) == 0){
+						if(horasUsoVeh[idVe]->count(countBloqueInicio, countBloqueFin) == 0){
 							// El vehículo está disponible y se puede asignar el viaje
 							costo += (distanciaTraslado * ii->vehi_cost[idVe]) * 2;
 							for(int ij = 0; ij < bloquesTotal; ij++){
-								usoVehiculos[idVe]->setBit(ij+countBloqueInicio);
+								horasUsoVeh[idVe]->setBit(ij+countBloqueInicio);
 								for(int kk = 0; kk < cantPerDisponibles; kk++){
 									Cuarteta xx;
 									xx.posp = insIn[i].posPersona;
@@ -177,7 +177,7 @@ InstanceSolution::InstanceSolution(InstanceInput* ii){
 									}
 									instance.push_back(xx);
 									// Marcar que la persona ya no tiene tiempo
-									horasPersona[xx.posp]->unsetBit(xx.posbh);
+									horasDispPer[xx.posp]->unsetBit(xx.posbh);
 								}
 							}
 							// Marcar Visita como asignada
@@ -211,9 +211,6 @@ InstanceSolution::InstanceSolution(InstanceInput* ii){
 
 	// Evaluar la solución inicial
 	evaluacion = evaluator();
-	for(int i=0; i<ii->n; i++){
-		delete horasPersona[i];
-	}
 }
 
 
@@ -235,8 +232,14 @@ InstanceSolution::~InstanceSolution(){
 	
 	// No se elimina el punteroII porque viene de Solver y ahí se elimina
 	for(int i=0; i<punteroII->m; i++){
-		if(usoVehiculos[i] != NULL){
-			delete usoVehiculos[i];
+		if(horasUsoVeh[i] != NULL){
+			delete horasUsoVeh[i];
+		}
+	}
+
+	for(int i=0; i<punteroII->n; i++){
+		if(horasDispPer[i] != NULL){
+			delete horasDispPer[i];
 		}
 	}
 }
