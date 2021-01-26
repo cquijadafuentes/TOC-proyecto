@@ -72,6 +72,17 @@ InstanceSolution::InstanceSolution(InstanceInput* ii){
 	for(int i=0; i<ii->m; i++){
 		usoVehiculos[i] = new MiniBitmap(ii->h);
 	}
+	// Copiar estructura con disponibilidad de las personas
+	vector<MiniBitmap*> horasPersona = vector<MiniBitmap*>(ii->n);
+	for(int i=0; i<ii->n; i++){
+		horasPersona[i] = ii->pers_horasdisp[i]->copia();
+		
+		cout << " ---- " << endl;
+		ii->pers_horasdisp[i]->printBitmap();
+		cout << endl;
+		horasPersona[i]->printBitmap();
+		cout << endl;
+	}
 	// Identificar jornadas y seleccionar los pares a la jornada
 	int jor_pos_fin, jor_pos_inicio;
 	time_t t_jorn_fin, t_jorn_inicio;
@@ -132,7 +143,7 @@ InstanceSolution::InstanceSolution(InstanceInput* ii){
 				int countBloqueInicio = jor_pos_inicio + deltaBloques;
 				int countBloqueFin = countBloqueInicio + bloquesTotal - 1;
 				for(int ij = 0; ij < ii->visita_cant_personas[pvisitalocal]; ij++){
-					if(ii->pers_horasdisp[visJornada[i+ij].posp]->count(countBloqueInicio, countBloqueFin) == bloquesTotal){
+					if(horasPersona[visJornada[i+ij].posp]->count(countBloqueInicio, countBloqueFin) == bloquesTotal){
 						cantPerDisponibles++;
 					}
 				}
@@ -165,6 +176,8 @@ InstanceSolution::InstanceSolution(InstanceInput* ii){
 										xx.posve = idVe;
 									}
 									instance.push_back(xx);
+									// Marcar que la persona ya no tiene tiempo
+									horasPersona[xx.posp]->unsetBit(xx.posbh);
 								}
 							}
 							// Marcar Visita como asignada
@@ -198,6 +211,9 @@ InstanceSolution::InstanceSolution(InstanceInput* ii){
 
 	// Evaluar la solución inicial
 	evaluacion = evaluator();
+	for(int i=0; i<ii->n; i++){
+		delete horasPersona[i];
+	}
 }
 
 

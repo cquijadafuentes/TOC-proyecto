@@ -142,3 +142,11 @@ int MiniBitmap::count(int pInicial, int pFinal){
 	return count;
 }
 
+MiniBitmap* MiniBitmap::copia(){
+	MiniBitmap* ret = new MiniBitmap(cap);
+	for(int i=0; i<ints; i++){
+		ret->bitmap[i] = bitmap[i];
+		ret->cant = cant;
+	}
+	return ret;
+}
