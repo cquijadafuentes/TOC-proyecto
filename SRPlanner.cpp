@@ -216,6 +216,7 @@ InstanceSolution::InstanceSolution(InstanceInput* ii){
 
 InstanceSolution::InstanceSolution(InstanceInput* ii, InstanceOutput* io){
 	// Generar solución desde un InstanceInput y un InstanceOutput
+	punteroII = ii->copiaInstanceInput();
 	// Para verificar una solución en base a los ficheros de entrada y salida
 
 	
@@ -230,14 +231,14 @@ InstanceSolution::InstanceSolution(InstanceInput* ii, InstanceOutput* io){
 InstanceSolution::~InstanceSolution(){
 	cout << "Borrando InstanceSolution" << endl;
 	
-	// No se elimina el punteroII porque viene de Solver y ahí se elimina
-	for(int i=0; i<punteroII->m; i++){
+	// No se borra punteroII porque es de solver y él lo borra.
+	for(int i=0; i<horasUsoVeh.size(); i++){
 		if(horasUsoVeh[i] != NULL){
 			delete horasUsoVeh[i];
 		}
 	}
 
-	for(int i=0; i<punteroII->n; i++){
+	for(int i=0; i<horasDispPer.size(); i++){
 		if(horasDispPer[i] != NULL){
 			delete horasDispPer[i];
 		}

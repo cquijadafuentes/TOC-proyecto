@@ -25,9 +25,9 @@ InstanceInput::InstanceInput(string filename){
 	// Lectura de n líneas con la información de las personas
 	pers_id = vector<string>(n);
 	pers_maxvisitas = vector<int>(n);
-	pers_horasdisp = vector<MiniBitmap*>(n);
-	pers_afin = vector<MiniBitmap*>(n);
-	pers_prefvisita = vector<MiniBitmap*>(n);
+	pers_horasdisp = vector<MiniBitmap*>(n,NULL);
+	pers_afin = vector<MiniBitmap*>(n,NULL);
+	pers_prefvisita = vector<MiniBitmap*>(n,NULL);
 
 	for(int i=0; i < n; i++){
 		// Cada línea cotiene:
@@ -132,8 +132,8 @@ InstanceInput::InstanceInput(string filename){
 	visita_ubicacion = vector<string>(l);
 	visita_bloque_inicio = vector<string>(l);
 	visita_bloque_fin = vector<string>(l);
-	visita_personas = vector<MiniBitmap*>(l);
-	visita_vehiculos = vector<MiniBitmap*>(l);
+	visita_personas = vector<MiniBitmap*>(l,NULL);
+	visita_vehiculos = vector<MiniBitmap*>(l,NULL);
 	visita_testimado_bloques = vector<int>(l);
 	visita_prioridad = vector<int>(l);
 	visita_cant_personas = vector<int>(l);
@@ -171,6 +171,12 @@ InstanceInput::InstanceInput(string filename){
 		mapa_visitas[visita_id[i]] = i;
 	}
 }
+
+
+InstanceInput::InstanceInput(){
+
+}
+
 
 InstanceInput::~InstanceInput(){
 	cout << "Eliminando InstanceInput..." << endl;
@@ -403,5 +409,63 @@ bool InstanceInput::bloqueContiguoConSiguiente(int posBl){
 		return false;
 	}
 	return sumaMinutos(bloque_timestamp[posBl],z) == bloque_timestamp[posBl+1];
+}
+
+
+InstanceInput* InstanceInput::copiaInstanceInput(){
+	InstanceInput* copia = new InstanceInput();
+	copia->n = n;
+	copia->m = m;
+	copia->k = k;
+	copia->h = h;
+	copia->z = z;
+	copia->l = l;
+	copia->v = v;
+
+	copia->pers_id = vector<string>(pers_id);
+	copia->pers_maxvisitas = vector<int>(pers_maxvisitas);
+	copia->pers_horasdisp = vector<MiniBitmap*>(n,NULL);
+	copia->pers_afin = vector<MiniBitmap*>(n,NULL);
+	copia->pers_prefvisita = vector<MiniBitmap*>(n,NULL);
+	for(int i=0; i < n; i++){
+		copia->pers_horasdisp[i] = pers_horasdisp[i]->copia();
+		copia->pers_afin[i] = pers_afin[i]->copia();
+		copia->pers_prefvisita[i] = pers_prefvisita[i]->copia();
+	}
+
+	copia->vehi_id = vector<string>(vehi_id);
+	copia->vehi_cap = vector<int>(vehi_cap);
+	copia->vehi_cost = vector<int>(vehi_cost);
+
+	copia->ubica_id = vector<string>(ubica_id);
+	copia->ubica_dist_mins = vector<vector<pair<float,int>>>(ubica_dist_mins);
+
+	copia->bloque_id = vector<string>(bloque_id);
+	copia->bloque_timestamp = vector<time_t>(bloque_timestamp);
+
+	copia->visita_id = vector<string>(visita_id);
+	copia->visita_ubicacion = vector<string>(visita_ubicacion);
+	copia->visita_bloque_inicio = vector<string>(visita_bloque_inicio);
+	copia->visita_bloque_fin = vector<string>(visita_bloque_fin);
+	copia->visita_personas = vector<MiniBitmap*>(n,NULL);
+	copia->visita_vehiculos = vector<MiniBitmap*>(m,NULL);
+	copia->visita_testimado_bloques = vector<int>(visita_testimado_bloques);
+	copia->visita_prioridad = vector<int>(visita_prioridad);
+	copia->visita_cant_personas = vector<int>(visita_cant_personas);
+	for(int i=0; i < n; i++){
+		copia->visita_personas[i] = pers_prefvisita[i]->copia();
+	}
+	for(int i=0; i < m; i++){
+		copia->visita_vehiculos[i] = visita_vehiculos[i]->copia();
+	}
+
+	copia->mapa_personas = unordered_map<string,int>(mapa_personas);
+	copia->mapa_vehiculos = unordered_map<string,int>(mapa_vehiculos);
+	copia->mapa_ubicaciones = unordered_map<string,int>(mapa_ubicaciones);
+	copia->mapa_bloquesh = unordered_map<string,int>(mapa_bloquesh);
+	copia->mapa_visitas = unordered_map<string,int>(mapa_visitas);
+
+	return copia;
+
 }
 

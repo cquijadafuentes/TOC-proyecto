@@ -80,9 +80,11 @@ class InstanceInput{
 		bool personaPuedeVisitar(int posPersona, int posVisita);
 		bool bloqueContiguoConSiguiente(int posBl);
 
+		InstanceInput* copiaInstanceInput();
+
 
 	private:
-		
+		InstanceInput();
 };
 
 

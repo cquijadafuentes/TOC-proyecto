@@ -45,6 +45,7 @@ class InstanceSolution{
 
 		InstanceInput* punteroII;
 
+		
 		InstanceSolution(InstanceInput* ii);
 		InstanceSolution(InstanceInput* ii, InstanceOutput* io);
 		~InstanceSolution();
