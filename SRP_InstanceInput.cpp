@@ -447,15 +447,13 @@ InstanceInput* InstanceInput::copiaInstanceInput(){
 	copia->visita_ubicacion = vector<string>(visita_ubicacion);
 	copia->visita_bloque_inicio = vector<string>(visita_bloque_inicio);
 	copia->visita_bloque_fin = vector<string>(visita_bloque_fin);
-	copia->visita_personas = vector<MiniBitmap*>(n,NULL);
-	copia->visita_vehiculos = vector<MiniBitmap*>(m,NULL);
+	copia->visita_personas = vector<MiniBitmap*>(l,NULL);
+	copia->visita_vehiculos = vector<MiniBitmap*>(l,NULL);
 	copia->visita_testimado_bloques = vector<int>(visita_testimado_bloques);
 	copia->visita_prioridad = vector<int>(visita_prioridad);
 	copia->visita_cant_personas = vector<int>(visita_cant_personas);
-	for(int i=0; i < n; i++){
-		copia->visita_personas[i] = pers_prefvisita[i]->copia();
-	}
-	for(int i=0; i < m; i++){
+	for(int i=0; i < l; i++){
+		copia->visita_personas[i] = visita_personas[i]->copia();
 		copia->visita_vehiculos[i] = visita_vehiculos[i]->copia();
 	}
 

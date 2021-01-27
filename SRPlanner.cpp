@@ -54,7 +54,7 @@ void Solver::SolucionPorBusquedaLocal(string outputFileName){
 
 
 InstanceSolution::InstanceSolution(InstanceInput* ii){
-	punteroII = ii;
+	punteroII = ii->copiaInstanceInput();
 	costo = 0.0;
 	cout << "Creando InstanceSolution" << endl;
 	// Generar asignación inicial personas-visitas
@@ -232,6 +232,9 @@ InstanceSolution::~InstanceSolution(){
 	cout << "Borrando InstanceSolution" << endl;
 	
 	// No se borra punteroII porque es de solver y él lo borra.
+	if(punteroII != NULL){
+		delete punteroII;
+	}
 	for(int i=0; i<horasUsoVeh.size(); i++){
 		if(horasUsoVeh[i] != NULL){
 			delete horasUsoVeh[i];

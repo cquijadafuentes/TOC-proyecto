@@ -7,7 +7,7 @@ MiniBitmap::MiniBitmap(int n){
 	}
 	cap = n;						// Cantidad de bits requeridos
 	ints = n/bits_int;				// Se calcula
-	if(ints * bits_int < n){		// Se actualiza 
+	if((ints * bits_int) < n){		// Se actualiza 
 		ints++;						// (por el truncado podría faltar 1 entero)
 	}
 	bitmap = new int[ints]();		// Se inicializa todo en 0
@@ -144,9 +144,9 @@ int MiniBitmap::count(int pInicial, int pFinal){
 
 MiniBitmap* MiniBitmap::copia(){
 	MiniBitmap* ret = new MiniBitmap(cap);
-	for(int i=0; i<ints; i++){
+	for(int i=0; i < ret->ints; i++){
 		ret->bitmap[i] = bitmap[i];
-		ret->cant = cant;
 	}
+	ret->cant = cant;
 	return ret;
 }
