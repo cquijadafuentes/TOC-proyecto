@@ -11,3 +11,5 @@ SRPlanner_test
 SRPlanner_checker
 SRPlanner_mincostf
 SRPlanner_solucionar
+
+SRPlanner.o
