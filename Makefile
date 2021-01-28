@@ -37,16 +37,16 @@ test_minibitmap_subc:
 	$(CPP) $(CPPFLAGS) -o test_minibitmap old/test_minibitmap.cpp $(OBJETOS)
 	
 SRPlanner_test:
-	$(CPP) $(ORTOOLSFLAGS) -o ./SRPlanner_test SRPlanner_test.cpp $(OBJETOS) SRPlanner.o
+	$(CPP) $(ORTOOLSFLAGS) -o ./SRPlanner_test SRPlanner_test.cpp $(OBJETOS) SRPlanner.o ./lib/libortools.so
 	
 SRPlanner_checker:
-	$(CPP) $(ORTOOLSFLAGS) -o ./SRPlanner_checker SRPlanner_checker.cpp $(OBJETOS) SRPlanner.o
+	$(CPP) $(ORTOOLSFLAGS) -o ./SRPlanner_checker SRPlanner_checker.cpp $(OBJETOS) SRPlanner.o ./lib/libortools.so
 
 SRPlanner_mincostf:
-	$(CPP) $(ORTOOLSFLAGS) -o ./SRPlanner_mincostf SRPlanner_mincostf.cpp $(OBJETOS) SRPlanner.o
+	$(CPP) $(ORTOOLSFLAGS) -o ./SRPlanner_mincostf SRPlanner_mincostf.cpp $(OBJETOS) SRPlanner.o ./lib/libortools.so
 
 SRPlanner_solucionar:
-	$(CPP) $(ORTOOLSFLAGS) -o ./SRPlanner_solucionar SRPlanner_solucionar.cpp $(OBJETOS) SRPlanner.o
+	$(CPP) $(ORTOOLSFLAGS) -o ./SRPlanner_solucionar SRPlanner_solucionar.cpp $(OBJETOS) SRPlanner.o ./lib/libortools.so
 
 clean:
 	rm -f $(OBJETOS) $(BINS) SRPlanner.o
