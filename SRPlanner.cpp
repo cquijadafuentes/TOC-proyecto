@@ -68,12 +68,12 @@ InstanceSolution::InstanceSolution(InstanceInput* ii){
 	// Generar estructura para marcar visitas asignadas
 	vector<bool> visitasAsignadas = vector<bool>(ii->l, false);
 	// Iniciar estructura para marcar el uso de los vehículos
-	horasUsoVeh = vector<MiniBitmap*>(ii->m);
+	horasUsoVeh = vector<MiniBitmap*>(ii->m, NULL);
 	for(int i=0; i<ii->m; i++){
 		horasUsoVeh[i] = new MiniBitmap(ii->h);
 	}
 	// Copiar estructura con disponibilidad de las personas
-	horasDispPer = vector<MiniBitmap*>(ii->n);
+	horasDispPer = vector<MiniBitmap*>(ii->n, NULL);
 	for(int i=0; i<ii->n; i++){
 		horasDispPer[i] = ii->pers_horasdisp[i]->copia();
 		
@@ -228,6 +228,11 @@ InstanceSolution::InstanceSolution(InstanceInput* ii, InstanceOutput* io){
 }
 
 
+InstanceSolution::InstanceSolution(){
+
+}
+
+
 InstanceSolution::~InstanceSolution(){
 	cout << "Borrando InstanceSolution" << endl;
 	
@@ -272,11 +277,58 @@ float InstanceSolution::evaluarInstancia(){
 }
 
 
-InstanceSolution* InstanceSolution::generarVecinos(){
+vector<InstanceSolution> InstanceSolution::generarVecinos(){
 	// ToDo: Generar vecinos
+	vector<InstanceSolution> vecinos;
+	bool condGenerarVecinos = true;
+	int maxIteraciones = 10;
+	float factor = 0.8;	// Factor para aceptar la solución generada entre los vecinos
+	while(condGenerarVecinos && maxIteraciones-- > 0){
+		InstanceSolution xx = copiaInstanceSolution();
+		// Revisar si es posible movimiento local
 
-	return NULL;
+
+		// Hacer movimiento local (En lo posible actualizar costo)
+
+
+
+		// checkear solución
+		xx.isValid = xx.checker();
+
+		if(xx.isValid){
+			// Si no se actualizó costo, hacerlo ahora
+			
+			// Evaluar la solución
+			xx.evaluacion = xx.evaluator();
+
+			if(xx.evaluacion > (evaluacion * factor)){
+				vecinos.push_back(xx);
+			}
+		}
+	}
+
+	return vecinos;
 }
+
+
+InstanceSolution InstanceSolution::copiaInstanceSolution(){
+	InstanceSolution ret;
+	ret.instance = vector<Cuarteta>(instance);
+	ret.horasUsoVeh = vector<MiniBitmap*>(horasUsoVeh.size(), NULL);
+	for (int i = 0; i < horasUsoVeh.size(); ++i){
+		ret.horasUsoVeh[i] = horasUsoVeh[i]->copia();
+	}
+	ret.horasDispPer = vector<MiniBitmap*>(horasDispPer.size(), NULL);
+	for (int i = 0; i < horasDispPer.size(); ++i){
+		ret.horasDispPer[i] = horasDispPer[i]->copia();
+	}
+	ret.costo = costo;
+	ret.isValid = isValid;
+	ret.evaluacion = evaluacion;
+
+	return ret;
+}
+
 
 vector<Tripleta> InstanceSolution::MinCostFlow(InstanceInput* ii){
 

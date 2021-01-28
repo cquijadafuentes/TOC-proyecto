@@ -45,7 +45,6 @@ class InstanceSolution{
 
 		InstanceInput* punteroII;
 
-		
 		InstanceSolution(InstanceInput* ii);
 		InstanceSolution(InstanceInput* ii, InstanceOutput* io);
 		~InstanceSolution();
@@ -53,17 +52,21 @@ class InstanceSolution{
 		bool validarInstancia();
 		float evaluarInstancia();
 
-		InstanceSolution* generarVecinos();
+		vector<InstanceSolution> generarVecinos();
+		InstanceSolution copiaInstanceSolution();
 
 		vector<Tripleta> MinCostFlow(InstanceInput* ii);
 		static bool sortTripletaPorTiempoInicio(Tripleta a, Tripleta b);
 		static bool sortCuartetaPorBloquePersona(Cuarteta a, Cuarteta b);
 		static bool sortCuartetaPorPersonaBloque(Cuarteta a, Cuarteta b);
 		
+
 		bool checker();
 		double evaluator();
 
 		void printInstanceSolution();
+	private:
+		InstanceSolution();
 };
 
 
