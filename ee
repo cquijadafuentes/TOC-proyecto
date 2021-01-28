@@ -1,24 +1,19 @@
-23
-pid_001	bhid_034	veid_000	uid_018
-pid_001	bhid_035	vid_011
-pid_001	bhid_039	veid_000	uid_019
-pid_001	bhid_122	vid_014
-pid_001	bhid_126	veid_000	uid_000
-pid_009	bhid_049	veid_000	uid_017
-pid_009	bhid_050	vid_001
-pid_009	bhid_059	veid_000	uid_002
-pid_009	bhid_072	vid_007
-pid_009	bhid_077	veid_000	uid_010
-pid_009	bhid_104	vid_008
-pid_009	bhid_111	veid_000	uid_000
-pid_012	bhid_015	veid_000	uid_011
-pid_012	bhid_020	vid_006
-pid_012	bhid_021	veid_000	uid_005
-pid_012	bhid_156	vid_009
-pid_012	bhid_163	veid_000	uid_000
-pid_014	bhid_049	veid_001	uid_004
-pid_014	bhid_055	vid_013
-pid_014	bhid_057	veid_001	uid_000
-pid_014	bhid_083	veid_000	uid_014
-pid_014	bhid_086	vid_012
-pid_014	bhid_095	veid_000	uid_000
+18
+pid_002	bhid_034	veid_000	uid_003
+pid_002	bhid_037	vid_000
+pid_002	bhid_038	veid_000	uid_000
+pid_002	bhid_049	vid_005
+pid_002	bhid_083	veid_000	uid_007
+pid_002	bhid_087	vid_007
+pid_002	bhid_098	veid_000	uid_000
+pid_006	bhid_000	veid_000	uid_008
+pid_006	bhid_001	vid_008
+pid_006	bhid_006	veid_000	uid_000
+pid_009	bhid_000	veid_001	uid_009
+pid_009	bhid_003	vid_002
+pid_009	bhid_007	veid_001	uid_000
+pid_009	bhid_049	veid_000	uid_001
+pid_009	bhid_054	vid_009
+pid_009	bhid_060	veid_000	uid_004
+pid_009	bhid_073	vid_003
+pid_009	bhid_077	veid_000	uid_000
