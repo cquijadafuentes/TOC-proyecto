@@ -39,7 +39,8 @@ Solver::~Solver(){
 
 void Solver::SolucionPorBusquedaLocal(string outputFileName){
 	// Ejecutar búsqueda
-	
+	is_actual->generarVecinos();
+	// Evaluar en la mejor solución, cuál es la ruta menos eficiente y eliminarla desde su punteroII para regenerar
 
 
 	// Generar archivo con la salida de los datos.
@@ -287,6 +288,42 @@ vector<InstanceSolution> InstanceSolution::generarVecinos(){
 	while(condGenerarVecinos && maxIteraciones-- > 0){
 		InstanceSolution xx = copiaInstanceSolution();
 		// Revisar si es posible movimiento local
+		// NOTA: si logramos mantener siempre ordenado por este criterio, no sería necesario hacer el sort.
+		sort(instance.begin(), instance.end(), sortCuartetaPorPersonaBloque);
+
+		// Identificar una ruta que se realiza en una jornada
+		int bri = 0;		// posición del Bloque Ruta Inicial
+		int brf = 1;		// posición del Bloque Ruta Final
+		int cant_visitas = 0;
+		vector<int> pubv; 	// Posiciones de las Ubicaciones de las visitas entre bri y brf.
+		vector<int> cbhev;	// Cantidad de bloques horarios entre visitas
+		cbhev.push_back(1);
+		int pcbhev = 0;
+		while(brf < instance.size() && instance[brf].posp == instance[bri].posp && punteroII->bloqueContiguoConSiguiente(bri)){
+			brf++;
+			if(instance[brf].posvi > instance[brf-1].posvi){
+				// Dado que la instancia es correca && no habrá dos bloques de visitos en 
+				// ubicaciones distintas contiguos, lo anterior significa que la pos anterior es -1
+				cant_visitas++;
+				pubv.push_back(instance[brf].posvi);
+				pcbhev++;
+				cbhev.push_back(0);
+			}else{
+				cbhev[pcbhev]++;
+			}
+		}
+		
+		cout << "Ruta identificada: " << endl;
+		for(int i=0; i < pubv.size(); i++){
+			cout << cbhev[i] << "t - " << pubv[i] << "ub" << endl;
+		}
+		cout << cbhev[cbhev.size()-1] << "t" << endl;
+		// bh_des_ida indica la cantidad de bloques utilizados en transporte a la primera visita.
+
+
+		// Identificar una segunda visita de la misma persona
+
+		// Verificar si se pueden unir las visitas
 
 
 		// Hacer movimiento local (En lo posible actualizar costo)
@@ -306,6 +343,7 @@ vector<InstanceSolution> InstanceSolution::generarVecinos(){
 				vecinos.push_back(xx);
 			}
 		}
+		condGenerarVecinos = false;
 	}
 
 	return vecinos;
