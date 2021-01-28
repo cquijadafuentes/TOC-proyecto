@@ -210,6 +210,14 @@ InstanceSolution::InstanceSolution(InstanceInput* ii){
 	// Checkear la solución inicial (si es válida)
 	isValid = checker();
 
+	cout << "La solución es valida? ";
+	if (isValid) {
+		cout << "Si";
+	} else {
+		cout << "No";
+	}
+	cout << endl;
+
 	// Evaluar la solución inicial
 	evaluacion = evaluator();
 }
@@ -474,16 +482,69 @@ bool InstanceSolution::checker(){
 	// Si los movimientos de una persona son lógicos (los vehículos lo llevan desde el origen hasta una ubicación)
 	// Y luego un vehículo lo lleva desde su ubicación hasta el destino, se asume que el vehículo también va bien.
 	sort(instance.begin(), instance.end(), sortCuartetaPorPersonaBloque);
-	// - Una persona no está en dos sitios al mismo tiempo
-	
 
+	// - Una persona no está en dos sitios al mismo tiempo
+	for(auto a = instance.begin(); a != instance.end()-1; a++) {
+		auto b = a+1;
+
+		// no es necesario ir al vector
+		if (a->posp == b->posp) {
+			if (a->posbh == b->posbh) {			// siquiera está bien que esté dos veces el mismo bloque horario para la misma persona??
+//				cout << "checker: personas" << endl;
+//				cout << a->posp << " " << b->posp << " " << a->posbh << " " << b->posbh << " " << endl;
+				return false;
+			}
+		}
+	}
+/*
+	for (int i = 0; i < instance.size(); ++i) {
+		cout << instance[i].posbh << " " << instance[i].posp << " " << instance[i].posve << " " << instance[i].posvi << endl;
+	}
+*/
 	// - Un vehículo no está en dos sitios al mismo tiempo
-	
+	for (auto a = instance.begin(); a != instance.end()-1; a++) {
+		auto b = a+1;
+
+		if (a->posbh == b->posbh) {
+			if (a->posve == b->posve) {
+//				cout << "checker: vehiculo" << endl;
+				return false;
+			}
+		}
+	}
 
 	// - Una persona llega a una visita posterior a un desplazamiento
-	
+	for (auto a = instance.begin(); a != instance.end()-1; a++) {
+		auto b = a+1;
+
+		if (a->posp == b->posp) {
+			if (b->posve == -1) {	// b es visita
+				if (a->posvi != -1 && a->posvi != b->posvi && (1+a->posbh)==(b->posbh)) {	// a es visita pero en otro lugar
+//					cout << "checker: -> visita" << endl;
+					return false;
+				}
+				// falta checkear si el desplazamiento correspondo a la ubicación
+			}
+		}
+		// caso contrario (true): a es desplazamiento o a es visita en el mismo lugar
+	}
 
 	// - Una persona se desplaza luego de una visita
+	for (auto a = instance.begin(); a != instance.end()-1; a++) {
+		auto b = a+1;
+
+		if (a->posp == b->posp) {
+			if (b->posvi == -1) { // b es desplazamiento
+				if (a->posvi == -1 && a->posve != b->posve && (1+a->posbh)==(b->posbh)) {	// a es desplazamiento y no corresponde al desplazamiento de b
+//					cout << "checker: -> desplaza" << endl;
+//					cout << a->posbh << " " << a->posp << " " << a->posve << " " << a->posvi << endl;
+//					cout << b->posbh << " " << b->posp << " " << b->posve << " " << b->posvi << endl;					
+					return false;		// no estoy seguro si esto verifica bien que los desplazamientos correspondan.
+				}
+			}
+		}
+		// caso contrario: a es visita o a es desplz. = b
+	}
 
 
 	// - Todo vehículo sale desde el serviu y vuelve al serviu en una misma jornada (?)
@@ -492,7 +553,8 @@ bool InstanceSolution::checker(){
 	// - Toda persona sale desde el serviu y vuelve al serviu en una misma jornada (?)
 
 
-	return false;
+	// Si no falló antes
+	return true;
 }
 
 
