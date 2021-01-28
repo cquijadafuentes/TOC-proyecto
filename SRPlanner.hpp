@@ -63,8 +63,10 @@ class InstanceSolution{
 
 		bool checker();
 		double evaluator();
+		bool cuartetasContiguasIguales(Cuarteta a, Cuarteta b);
 
 		void printInstanceSolution();
+		void printToFile(string fn);
 	private:
 		InstanceSolution();
 };

@@ -112,7 +112,7 @@ int main(int argc, char const *argv[]){
 	// id capacidad costo
 	for(int i=0; i<m; i++){
 		// id
-		os << "vid_"<< setfill ('0') << setw (3) << i;
+		os << "veid_"<< setfill ('0') << setw (3) << i;
 
 		int cap = (rand() % 8) + 3;	// De 3 a 10 personas
 		os << " " << cap;

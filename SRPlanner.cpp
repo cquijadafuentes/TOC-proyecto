@@ -28,24 +28,26 @@ Solver::Solver(string filename){
 
 Solver::~Solver(){
 	if(ii != NULL){
+		cout << "Desde solver: ";
 		delete ii;
 	}
 	
 	if(is_actual != NULL){
+		cout << "Desde solver: ";
 		delete is_actual;
 	}
 }
 
 
 void Solver::SolucionPorBusquedaLocal(string outputFileName){
-	// Ejecutar búsqueda
-	is_actual->generarVecinos();
-	// Evaluar en la mejor solución, cuál es la ruta menos eficiente y eliminarla desde su punteroII para regenerar
+
+
+
+
 
 
 	// Generar archivo con la salida de los datos.
-	InstanceOutput salida;
-	salida.generarFichero(outputFileName);
+	is_actual->printToFile(outputFileName);
 }
 
 
@@ -279,12 +281,20 @@ float InstanceSolution::evaluarInstancia(){
 }
 
 
+
+
 vector<InstanceSolution> InstanceSolution::generarVecinos(){
 	// ToDo: Generar vecinos
 	vector<InstanceSolution> vecinos;
+/*
 	bool condGenerarVecinos = true;
 	int maxIteraciones = 10;
 	float factor = 0.8;	// Factor para aceptar la solución generada entre los vecinos
+
+
+	return vecinos;		// Se cae el código aún.
+
+
 	while(condGenerarVecinos && maxIteraciones-- > 0){
 		InstanceSolution xx = copiaInstanceSolution();
 		// Revisar si es posible movimiento local
@@ -299,7 +309,7 @@ vector<InstanceSolution> InstanceSolution::generarVecinos(){
 //		vector<int> cbhev;	// Cantidad de bloques horarios entre visitas
 //		cbhev.push_back(1);
 //		int pcbhev = 0;
-		while(brf < instance.size() && punteroII->bloqueContiguoConSiguiente(bri) && instance[brf+1].posp == instance[bri].posp ){
+		while(brf-1 < instance.size() && punteroII->bloqueContiguoConSiguiente(brf) && instance[brf+1].posp == instance[bri].posp ){
 			brf++;
 			if(instance[brf].posvi > instance[brf-1].posvi){
 				// Dado que la instancia es correca y no habrá dos bloques de visitas en 
@@ -319,36 +329,47 @@ vector<InstanceSolution> InstanceSolution::generarVecinos(){
 		}
 		cout << "En " << (brf - bri + 1) << " bloques." << endl;
 		return vecinos;
-		// bh_des_ida indica la cantidad de bloques utilizados en transporte a la primera visita.
+
+		// Si hay más visitas planificadas para la misma persona
+		if((brf + 1) < instance.size() && instance[brf+1].posp == instance[brf].posp){
+			// Identificar una segunda visita de la misma persona que podría integrarse a su última ruta
+			int bri2 = brf + 1;
+			int brf2 = bri2 + 1;
+			while(brf2-1 < instance.size() && punteroII->bloqueContiguoConSiguiente(brf2) && instance[brf2+1].posp == instance[bri2].posp){
+				
+			}
 
 
-		// Identificar una segunda visita de la misma persona
-
-		// Verificar si se pueden unir las visitas
+			// Verificar si se pueden unir las visitas
 
 
-		// Hacer movimiento local (En lo posible actualizar costo)
+			// Hacer movimiento local (En lo posible actualizar costo)
 
 
 
-		// checkear solución
-		xx.isValid = xx.checker();
+			// checkear solución
+			xx.isValid = xx.checker();
 
-		if(xx.isValid){
-			// Si no se actualizó costo, hacerlo ahora
-			
-			// Evaluar la solución
-			xx.evaluacion = xx.evaluator();
+			if(xx.isValid){
+				// Si no se actualizó costo, hacerlo ahora
+				
+				// Evaluar la solución
+				xx.evaluacion = xx.evaluator();
 
-			if(xx.evaluacion > (evaluacion * factor)){
-				vecinos.push_back(xx);
+				if(xx.evaluacion > (evaluacion * factor)){
+					vecinos.push_back(xx);
+				}
 			}
 		}
 		condGenerarVecinos = false;
 	}
 
+	*/
 	return vecinos;
+
 }
+
+
 
 
 InstanceSolution InstanceSolution::copiaInstanceSolution(){
@@ -545,7 +566,23 @@ double InstanceSolution::evaluator(){
 }
 
 
+bool InstanceSolution::cuartetasContiguasIguales(Cuarteta a, Cuarteta b){
+	if(a.posp != b.posp){
+		return false;
+	}
+	if(a.posvi != b.posvi){
+		return false;
+	}
+	if(a.posve != b.posve){
+		return false;
+	}
+	return punteroII->bloqueContiguoConSiguiente(a.posbh);
+	
+}
+
+
 void InstanceSolution::printInstanceSolution(){
+	cout << "(" << instance.size() << " bloques-persona-actividad)" << endl;
 	cout << "bh\tp\tve\tvi" << endl;
 	for(int i=0; i<instance.size(); i++){
 		cout << instance[i].posbh;
@@ -554,3 +591,46 @@ void InstanceSolution::printInstanceSolution(){
 		cout << "\t" << instance[i].posvi << endl;
 	}
 }
+
+
+
+void InstanceSolution::printToFile(string fn){
+	cout <<  "Mostrando OUTPUT: " << endl;
+	vector<Cuarteta> sinrep;
+	ofstream os;
+	sort(instance.begin(), instance.end(), sortCuartetaPorPersonaBloque);
+	string ubOrigen = punteroII->ubica_id[0];
+	for(int i=0; i<instance.size(); i++){
+		if(i==0 || (i>0 && !cuartetasContiguasIguales(instance[i-1], instance[i]))){
+			Cuarteta xx;
+			xx.posp = instance[i].posp;
+			xx.posbh = instance[i].posbh;
+			if(instance[i].posve != -1){
+				xx.posve = instance[i].posve;
+				xx.posvi = -1;
+			}else{
+				xx.posvi = instance[i].posvi;
+				xx.posve = -1;
+			}
+			sinrep.push_back(xx);
+		}
+	}
+	os.open(fn);
+	os << sinrep.size() << endl;
+	for(int i=0; i<sinrep.size(); i++){
+		os << punteroII->pers_id[sinrep[i].posp];
+		os << "\t" << punteroII->bloque_id[sinrep[i].posbh];
+		if(sinrep[i].posve != -1){
+			os << "\t" << punteroII->vehi_id[sinrep[i].posve];
+			if((i+1) < sinrep.size() && sinrep[i+1].posvi != -1){
+				os << "\t" << punteroII->visita_ubicacion[sinrep[i+1].posvi] << endl;
+			}else{
+				os << "\t" << punteroII->ubica_id[0] << endl;
+			}
+		}else{
+			os << "\t" << punteroII->visita_id[sinrep[i].posvi] << endl;
+		}
+	}
+}
+
+
