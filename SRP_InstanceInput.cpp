@@ -1,3 +1,4 @@
+
 #include "SRP_InstanceInput.hpp"
 
 //	***********************************************************
@@ -374,6 +375,7 @@ time_t InstanceInput::getFinVetanaVisita(string idVisita){
 	// Sumar el tiempo del bloque para tener el tiempo límite
 	return sumaMinutos(inicioBFin,z);
 }
+
 
 bool InstanceInput::personaPuedeVisitar(int posPersona, int posVisita){
 	// Verificar si hay intersección entre el horario de la persona y la ventana de visita

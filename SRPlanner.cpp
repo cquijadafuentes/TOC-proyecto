@@ -39,6 +39,7 @@ Solver::~Solver(){
 
 void Solver::SolucionPorBusquedaLocal(string outputFileName){
 	// Ejecutar búsqueda
+	
 
 
 	// Generar archivo con la salida de los datos.
@@ -416,7 +417,7 @@ vector<Tripleta> InstanceSolution::MinCostFlow(InstanceInput* ii){
 	// Find the maximum flow between node 0 and node 4.
 	min_cost_flow.Solve();
 	if (operations_research::MinCostFlow::OPTIMAL != min_cost_flow.status()) {
-		LOG(FATAL) << "Solving the max flow is not optimal!";
+		LOG(FATAL) << "El SERVIU no puede realizar todas las visitas por el límite de visitas en los funcionarios.";
 	}
 	operations_research::FlowQuantity total_flow_cost = min_cost_flow.GetOptimalCost();
 	
