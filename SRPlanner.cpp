@@ -296,28 +296,29 @@ vector<InstanceSolution> InstanceSolution::generarVecinos(){
 		int brf = 1;		// posición del Bloque Ruta Final
 		int cant_visitas = 0;
 		vector<int> pubv; 	// Posiciones de las Ubicaciones de las visitas entre bri y brf.
-		vector<int> cbhev;	// Cantidad de bloques horarios entre visitas
-		cbhev.push_back(1);
-		int pcbhev = 0;
-		while(brf < instance.size() && instance[brf].posp == instance[bri].posp && punteroII->bloqueContiguoConSiguiente(bri)){
+//		vector<int> cbhev;	// Cantidad de bloques horarios entre visitas
+//		cbhev.push_back(1);
+//		int pcbhev = 0;
+		while(brf < instance.size() && punteroII->bloqueContiguoConSiguiente(bri) && instance[brf+1].posp == instance[bri].posp ){
 			brf++;
 			if(instance[brf].posvi > instance[brf-1].posvi){
-				// Dado que la instancia es correca && no habrá dos bloques de visitos en 
-				// ubicaciones distintas contiguos, lo anterior significa que la pos anterior es -1
+				// Dado que la instancia es correca y no habrá dos bloques de visitas en 
+				// contiguos que tengan distinta ubicación se deduce que -1 < cualquier visita
 				cant_visitas++;
 				pubv.push_back(instance[brf].posvi);
-				pcbhev++;
-				cbhev.push_back(0);
-			}else{
-				cbhev[pcbhev]++;
+//				pcbhev++;
+//				cbhev.push_back(0);
+//			}else{
+//				cbhev[pcbhev]++;
 			}
 		}
-		
+
 		cout << "Ruta identificada: " << endl;
 		for(int i=0; i < pubv.size(); i++){
-			cout << cbhev[i] << "t - " << pubv[i] << "ub" << endl;
+			cout << pubv[i] << " - " << endl;
 		}
-		cout << cbhev[cbhev.size()-1] << "t" << endl;
+		cout << "En " << (brf - bri + 1) << " bloques." << endl;
+		return vecinos;
 		// bh_des_ida indica la cantidad de bloques utilizados en transporte a la primera visita.
 
 
