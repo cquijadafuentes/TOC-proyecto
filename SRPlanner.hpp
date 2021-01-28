@@ -9,6 +9,7 @@
 #include <vector>
 #include <algorithm>
 #include <unordered_map>
+#include <queue>
 #include "MiniBitmap.hpp"
 #include "SRP_Utils.hpp"
 #include "SRP_InstanceOutput.hpp"
@@ -18,6 +19,8 @@
 #include "ortools/base/logging.h"
 
 using namespace std;
+
+#define HH 5000.0
 
 struct Cuarteta{
 	int posbh;	// pos de Bloque Horario
@@ -39,6 +42,7 @@ class InstanceSolution{
 		vector<Cuarteta> instance;	// vector para persona, horario, vehículo o visita.
 		vector<MiniBitmap*> horasUsoVeh;	// Para marcar los bloques en que se usan vehículos (1 vehículo en uso)
 		vector<MiniBitmap*> horasDispPer;	// Para marcar los bloques disponibles de la persona
+		vector<bool> visitasAsignadas;		// mascara de las visitas asignadas
 		bool isValid;				// resultado del checker
 		double evaluacion;			// factor de calidad de la instancia
 		float costo;				// costo de la solución (traslado de vehículos)
@@ -49,10 +53,7 @@ class InstanceSolution{
 		InstanceSolution(InstanceInput* ii, InstanceOutput* io);
 		~InstanceSolution();
 
-		bool validarInstancia();
-		float evaluarInstancia();
-
-		vector<InstanceSolution> generarVecinos();
+		vector<InstanceSolution*> generarVecinos();
 		InstanceSolution copiaInstanceSolution();
 
 		vector<Tripleta> MinCostFlow(InstanceInput* ii);
@@ -67,6 +68,7 @@ class InstanceSolution{
 		void printInstanceSolution();
 	private:
 		InstanceSolution();
+		InstanceSolution* reasignar_visita(int posvi);
 };
 
 
@@ -78,6 +80,7 @@ class Solver{
 		~Solver();
 
 		void SolucionPorBusquedaLocal(string outputFileName);
+		
 	private:
 };
 

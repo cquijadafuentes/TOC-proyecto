@@ -38,8 +38,28 @@ Solver::~Solver(){
 
 
 void Solver::SolucionPorBusquedaLocal(string outputFileName){
-	// Ejecutar búsqueda
+	InstanceSolution *busqueda_en_sol = is_actual;
+	for (int i=0; i<1000; i++) {
+		vector<InstanceSolution*> vecinos = busqueda_en_sol->generarVecinos();
 
+		if (vecinos[0] == nullptr or is_actual->evaluator() <= vecinos[0]->evaluator()) {
+			for (auto &ptr : vecinos)
+				delete ptr;
+
+			// Se puede salir o podriamos generar un vecindario completamente nuevo para seguir buscando
+			break;
+			// busqueda_en_sol = nueva_vecindad();
+		}
+		else {
+			delete is_actual;
+			is_actual = vecinos[0];
+			busqueda_en_sol = is_actual;
+
+			for (int i=1; i<vecinos.size(); i++)
+				delete vecinos[i];
+		}
+
+	}
 
 	// Generar archivo con la salida de los datos.
 	InstanceOutput salida;
@@ -66,7 +86,7 @@ InstanceSolution::InstanceSolution(InstanceInput* ii){
 	// 1° Ordenar el vector por el bloque de inicio de la visita
 	sort(insIn.begin(), insIn.end(), sortTripletaPorTiempoInicio);
 	// Generar estructura para marcar visitas asignadas
-	vector<bool> visitasAsignadas = vector<bool>(ii->l, false);
+	visitasAsignadas = vector<bool>(ii->l, false);
 	// Iniciar estructura para marcar el uso de los vehículos
 	horasUsoVeh = vector<MiniBitmap*>(ii->m, NULL);
 	for(int i=0; i<ii->m; i++){
@@ -114,6 +134,12 @@ InstanceSolution::InstanceSolution(InstanceInput* ii){
 			i++;
 		}
 		cout << "Visitas en evaluación antes de " << stringTime(t_jorn_fin) << endl;
+		auto lambda_sorter = [ii](Cuarteta &a, Cuarteta &b) {
+			return (ii->visita_prioridad[a.posvi])>(ii->visita_prioridad[b.posvi]);
+		};
+		sort(visJornada.begin(),visJornada.end(),lambda_sorter);
+		cout << "prioridades!!!\n";
+		for (auto &data:visJornada) cout << ii->visita_prioridad[data.posvi] << endl;
 		for(int i=0; i<visJornada.size(); i++){
 			int pvisitalocal = visJornada[i].posvi;
 			printCuarteta(visJornada[i]);
@@ -211,6 +237,7 @@ InstanceSolution::InstanceSolution(InstanceInput* ii){
 
 	// Evaluar la solución inicial
 	evaluacion = evaluator();
+	cout << "Valor de la solucion inicial: " << int(evaluacion) << endl;
 }
 
 
@@ -254,60 +281,49 @@ InstanceSolution::~InstanceSolution(){
 }
 
 
-bool InstanceSolution::validarInstancia(){
-	cout << "validarInstancia" << endl;
+vector<InstanceSolution*> InstanceSolution::generarVecinos(){
+	vector<pair<float,int>> costo_visita(visitasAsignadas.size());
+	vector<InstanceSolution*> vecinos (visitasAsignadas.size(),nullptr);
 
-	return false;
-}
+	for (int i=0; i<visitasAsignadas.size(); i++) {
+		costo_visita[i] = make_pair(0,i);
 
-
-float InstanceSolution::evaluarInstancia(){
-	cout << "evaluarInstancia" << endl;
-	// Calcular costo de la solución
-	//
-	costo = 0.0;
-	for(int i=0; i<instance.size(); i++){
-		// 
-
+		// if (!visitasAsignadas[i])
+		// 	ev += 10*punteroII->visita_prioridad[i]  *  valor_bloque*punteroII->visita_testimado_bloques[i];
 	}
 
-	// Calcular calidad de la solución
+	priority_queue<pair<float,int>> heap_costo_visita(costo_visita.begin(), costo_visita.end());
 
-	return 0.0;
-}
+	// Ejecutar búsqueda
+	while (heap_costo_visita.size()) {
+		auto visita_cara = heap_costo_visita.top();
+		heap_costo_visita.pop();
 
+		// Reasignacion de la visita:
+		InstanceSolution *nueva_solucion = reasignar_visita(visita_cara.second);
 
-vector<InstanceSolution> InstanceSolution::generarVecinos(){
-	// ToDo: Generar vecinos
-	vector<InstanceSolution> vecinos;
-	bool condGenerarVecinos = true;
-	int maxIteraciones = 10;
-	float factor = 0.8;	// Factor para aceptar la solución generada entre los vecinos
-	while(condGenerarVecinos && maxIteraciones-- > 0){
-		InstanceSolution xx = copiaInstanceSolution();
-		// Revisar si es posible movimiento local
-
-
-		// Hacer movimiento local (En lo posible actualizar costo)
-
-
-
-		// checkear solución
-		xx.isValid = xx.checker();
-
-		if(xx.isValid){
-			// Si no se actualizó costo, hacerlo ahora
-			
-			// Evaluar la solución
-			xx.evaluacion = xx.evaluator();
-
-			if(xx.evaluacion > (evaluacion * factor)){
-				vecinos.push_back(xx);
-			}
-		}
+		// Si se encuentra una modificacion guardamos la solucion
+		if (nueva_solucion->evaluator() < evaluator())
+			vecinos[visita_cara.second] = nueva_solucion;
 	}
+
+	auto lambda_sorter = [](InstanceSolution *a, InstanceSolution *b) {
+		if (a==nullptr)
+			return false;
+		if (b==nullptr)
+			return true;
+		return a->evaluator()<b->evaluator();
+	};
+	sort(vecinos.begin(), vecinos.end(), lambda_sorter);
 
 	return vecinos;
+}
+
+
+InstanceSolution* InstanceSolution::reasignar_visita(int posvi) {
+	// Corazon de la busqueda local
+
+	return nullptr;
 }
 
 
@@ -500,6 +516,21 @@ double InstanceSolution::evaluator(){
 	// - La función objetivo (el costo)
 	// - Los tiempos de espera
 	double ev = 0.0;
+	float valor_bloque = HH/60.0*punteroII->z;
+
+	// Costo de transporte por los vehiculos
+	ev += costo;
+
+	// Costo de uso horario de nuestros empleados
+	ev += valor_bloque*instance.size();
+
+	// Costo de una visita no asignada, heuristica:
+	for (int i=0; i<visitasAsignadas.size(); i++) {
+		if (!visitasAsignadas[i])
+			ev += 10*punteroII->visita_prioridad[i]  *  (valor_bloque*punteroII->visita_testimado_bloques[i] + punteroII->v);
+		else
+			ev += punteroII->v;
+	}
 	
 	return ev;
 }
