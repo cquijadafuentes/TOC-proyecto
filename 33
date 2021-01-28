@@ -1,0 +1,129 @@
+128
+p01	bh_01	v04	serviu
+p01	bh_01	v02	serviu
+p01	bh_01	v04	serviu
+p01	bh_01	v02	ub_14
+p01	bh_02	vi_14
+p01	bh_02	v04	ub_14
+p01	bh_02	vi_14
+p01	bh_02	vi_09
+p01	bh_02	vi_10
+p01	bh_03	vi_09
+p01	bh_03	v04	ub_10
+p01	bh_03	vi_10
+p01	bh_03	vi_14
+p01	bh_04	vi_09
+p01	bh_04	vi_14
+p01	bh_04	vi_10
+p01	bh_04	vi_18
+p01	bh_05	v02	serviu
+p01	bh_05	v04	ub_10
+p01	bh_05	vi_10
+p01	bh_05	v02	ub_18
+p01	bh_05	vi_18
+p01	bh_06	v04	ub_18
+p01	bh_06	vi_18
+p01	bh_08	v04	serviu
+p02	bh_01	v02	serviu
+p02	bh_01	v03	serviu
+p02	bh_01	v02	ub_08
+p02	bh_02	vi_08
+p02	bh_02	vi_02
+p02	bh_02	vi_04
+p02	bh_02	v03	ub_08
+p02	bh_03	vi_08
+p02	bh_03	vi_02
+p02	bh_03	v03	ub_04
+p02	bh_03	vi_04
+p02	bh_04	vi_08
+p02	bh_04	vi_06
+p02	bh_04	v02	ub_04
+p02	bh_04	vi_04
+p02	bh_05	vi_08
+p02	bh_05	vi_04
+p02	bh_05	vi_06
+p02	bh_06	vi_08
+p02	bh_06	v03	ub_04
+p02	bh_06	vi_04
+p02	bh_07	vi_08
+p02	bh_07	vi_04
+p02	bh_07	v03	serviu
+p02	bh_08	v02	serviu
+p02	bh_08	v03	ub_08
+p02	bh_08	vi_08
+p02	bh_10	v02	serviu
+p02	bh_45	v01	ub_20
+p02	bh_48	vi_20
+p02	bh_56	v01	serviu
+p03	bh_01	v03	serviu
+p03	bh_01	v04	serviu
+p03	bh_01	v02	serviu
+p03	bh_01	v03	serviu
+p03	bh_01	v01	serviu
+p03	bh_01	v04	ub_11
+p03	bh_02	vi_11
+p03	bh_02	vi_15
+p03	bh_02	v02	serviu
+p03	bh_02	v04	ub_12
+p03	bh_02	vi_12
+p03	bh_02	vi_03
+p03	bh_02	vi_13
+p03	bh_03	vi_17
+p03	bh_03	vi_12
+p03	bh_03	vi_03
+p03	bh_03	vi_07
+p03	bh_03	vi_11
+p03	bh_03	vi_13
+p03	bh_03	vi_15
+p03	bh_04	v01	ub_12
+p03	bh_04	vi_12
+p03	bh_04	vi_17
+p03	bh_04	vi_15
+p03	bh_04	vi_03
+p03	bh_04	vi_07
+p03	bh_04	vi_11
+p03	bh_05	vi_12
+p03	bh_05	vi_11
+p03	bh_05	vi_03
+p03	bh_05	v02	ub_15
+p03	bh_05	vi_15
+p03	bh_05	vi_07
+p03	bh_06	vi_15
+p03	bh_06	vi_11
+p03	bh_06	vi_12
+p03	bh_06	vi_07
+p03	bh_06	v03	serviu
+p03	bh_06	v02	ub_12
+p03	bh_07	vi_12
+p03	bh_07	v04	serviu
+p03	bh_07	v03	ub_11
+p03	bh_07	vi_11
+p03	bh_08	v04	serviu
+p03	bh_08	v03	ub_12
+p03	bh_08	vi_12
+p03	bh_10	v04	serviu
+p04	bh_01	v01	ub_01
+p04	bh_02	vi_01
+p04	bh_02	vi_16
+p04	bh_03	v01	ub_16
+p04	bh_03	vi_16
+p04	bh_03	vi_01
+p04	bh_04	vi_16
+p04	bh_04	vi_05
+p04	bh_05	vi_01
+p04	bh_05	vi_05
+p04	bh_05	vi_16
+p04	bh_06	vi_01
+p04	bh_06	vi_05
+p04	bh_06	vi_16
+p04	bh_07	vi_05
+p04	bh_07	vi_01
+p04	bh_07	vi_16
+p04	bh_08	v01	ub_05
+p04	bh_08	vi_05
+p04	bh_09	vi_16
+p04	bh_10	v01	ub_05
+p04	bh_10	vi_05
+p04	bh_12	v01	ub_19
+p04	bh_48	vi_19
+p04	bh_54	v01	serviu
